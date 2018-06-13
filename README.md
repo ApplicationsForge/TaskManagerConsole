@@ -8,13 +8,13 @@ Uses as a base for [LightTaskManager project](https://github.com/moevm/gui-1h201
 1. Install Go
 1. Setup `&GOPATH`, `&GOROOT`, `&GOBIN`
 1. `cd &GOPATH`
-1. `mkdir -p /src/github.com/gammons & cd /src/github.com/gammons`
-1. `git clone git@github.com:Xtails-Inc/todolist.git`
+1. `mkdir -p /src/github.com/ApplicationsForge & cd /src/github.com/ApplicationsForge`
+1. `git clone git@github.com:ApplicationsForge/TaskTerminal.git`
 1. `go get ./...`
 
 ## Testing installation
 1. `cd $GOBIN`
-1. `./todolist`
+1. `./TaskTerminal`
 
 ## License
 
