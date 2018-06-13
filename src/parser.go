@@ -20,7 +20,7 @@ func (p *Parser) ParseNewTodo(input string) *Todo {
 
 	todo := NewTodo()
 	todo.Subject = p.Subject(input)
-	todo.Projects = p.Projects(input)
+	todo.Tags = p.Tags(input)
 	todo.Contexts = p.Contexts(input)
 	if p.hasDue(input) {
 		todo.Due = p.Due(input, time.Now())
@@ -40,7 +40,7 @@ func (p *Parser) ParseEditTodo(todo *Todo, input string) bool {
 
 	if p.Subject(subjectOnly) != "" {
 		todo.Subject = p.Subject(subjectOnly)
-		todo.Projects = p.Projects(subjectOnly)
+		todo.Tags = p.Tags(subjectOnly)
 		todo.Contexts = p.Contexts(subjectOnly)
 	}
 	if p.hasDue(subjectOnly) {
@@ -70,7 +70,7 @@ func (p *Parser) ExpandProject(input string) string {
 	return project[len(project)-1]
 }
 
-func (p *Parser) Projects(input string) []string {
+func (p *Parser) Tags(input string) []string {
 	r, _ := regexp.Compile(`\+[\p{L}\d_-]+`)
 	return p.matchWords(input, r)
 }

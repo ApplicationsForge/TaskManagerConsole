@@ -25,7 +25,7 @@ func TestParseSubjectWithDue(t *testing.T) {
 	}
 }
 
-func TestParseExpandProjects(t *testing.T) {
+func TestParseExpandTags(t *testing.T) {
 	assert := assert.New(t)
 	parser := &Parser{}
 	correctFormat := parser.ExpandProject("ex 113 +meeting: figures, slides, coffee, suger")
@@ -40,23 +40,23 @@ func TestParseExpandProjects(t *testing.T) {
 	assert.Equal("+重要な會議", wrongFormat4)
 }
 
-func TestParseProjects(t *testing.T) {
+func TestParseTags(t *testing.T) {
 	parser := &Parser{}
 	todo := parser.ParseNewTodo("do this thing +proj1 +proj2 +專案3 +proj-name due tomorrow")
-	if len(todo.Projects) != 4 {
-		t.Error("Expected Projects length to be 3")
+	if len(todo.Tags) != 4 {
+		t.Error("Expected Tags length to be 3")
 	}
-	if todo.Projects[0] != "proj1" {
-		t.Error("todo.Projects[0] should equal 'proj1' but got", todo.Projects[0])
+	if todo.Tags[0] != "proj1" {
+		t.Error("todo.Tags[0] should equal 'proj1' but got", todo.Tags[0])
 	}
-	if todo.Projects[1] != "proj2" {
-		t.Error("todo.Projects[1] should equal 'proj2' but got", todo.Projects[1])
+	if todo.Tags[1] != "proj2" {
+		t.Error("todo.Tags[1] should equal 'proj2' but got", todo.Tags[1])
 	}
-	if todo.Projects[2] != "專案3" {
-		t.Error("todo.Projects[2] should equal '專案3' but got", todo.Projects[2])
+	if todo.Tags[2] != "專案3" {
+		t.Error("todo.Tags[2] should equal '專案3' but got", todo.Tags[2])
 	}
-	if todo.Projects[3] != "proj-name" {
-		t.Error("todo.Projects[3] should equal 'proj-name' but got", todo.Projects[3])
+	if todo.Tags[3] != "proj-name" {
+		t.Error("todo.Tags[3] should equal 'proj-name' but got", todo.Tags[3])
 	}
 }
 
@@ -64,7 +64,7 @@ func TestParseContexts(t *testing.T) {
 	parser := &Parser{}
 	todo := parser.ParseNewTodo("do this thing with @bob and @mary due tomorrow")
 	if len(todo.Contexts) != 2 {
-		t.Error("Expected Projects length to be 2")
+		t.Error("Expected Tags length to be 2")
 	}
 	if todo.Contexts[0] != "bob" {
 		t.Error("todo.Contexts[0] should equal 'mary' but got", todo.Contexts[0])
@@ -311,13 +311,13 @@ func TestParseEditTodoJustSubject(t *testing.T) {
 	assert.Equal(todo.Subject, "changed the todo")
 }
 
-func TestParseEditTodoSubjectUpdatesProjectsAndContexts(t *testing.T) {
+func TestParseEditTodoSubjectUpdatesTagsAndContexts(t *testing.T) {
 	assert := assert.New(t)
 	parser := &Parser{}
 	todo := &Todo{
 		Subject:  "pick up the +trash with @dad",
 		Due:      "2016-11-25",
-		Projects: []string{"trash"},
+		Tags: []string{"trash"},
 		Contexts: []string{"dad"},
 	}
 
@@ -325,7 +325,7 @@ func TestParseEditTodoSubjectUpdatesProjectsAndContexts(t *testing.T) {
 
 	assert.Equal(todo.Due, "2016-11-25")
 	assert.Equal(todo.Subject, "get the +garbage with @mom")
-	assert.Equal(todo.Projects, []string{"garbage"})
+	assert.Equal(todo.Tags, []string{"garbage"})
 	assert.Equal(todo.Contexts, []string{"mom"})
 }
 
@@ -335,7 +335,7 @@ func TestParseEditTodoWithSubjectAndDue(t *testing.T) {
 	todo := &Todo{
 		Subject:  "pick up the +trash with @dad",
 		Due:      "2016-11-25",
-		Projects: []string{"trash"},
+		Tags: []string{"trash"},
 		Contexts: []string{"dad"},
 	}
 	tomorrow := time.Now().AddDate(0, 0, 1).Format("2006-01-02")

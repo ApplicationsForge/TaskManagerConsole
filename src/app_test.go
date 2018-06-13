@@ -23,7 +23,7 @@ func TestAddTodo(t *testing.T) {
 	assert.Equal(false, todo.Archived)
 	assert.Equal(false, todo.IsPriority)
 	assert.Equal("", todo.CompletedDate)
-	assert.Equal([]string{}, todo.Projects)
+	assert.Equal([]string{}, todo.Tags)
 	assert.Equal([]string{}, todo.Contexts)
 }
 
@@ -38,7 +38,7 @@ func TestAddDoneTodo(t *testing.T) {
 	assert.Equal(true, todo.Completed)
 	assert.Equal(false, todo.Archived)
 	assert.Equal(false, todo.IsPriority)
-	assert.Equal([]string{}, todo.Projects)
+	assert.Equal([]string{}, todo.Tags)
 	assert.Equal(1, len(todo.Contexts))
 	assert.Equal("pop", todo.Contexts[0])
 }
@@ -57,7 +57,7 @@ func TestAddTodoWithEuropeanDates(t *testing.T) {
 	assert.Equal(false, todo.Archived)
 	assert.Equal(false, todo.IsPriority)
 	assert.Equal("", todo.CompletedDate)
-	assert.Equal([]string{}, todo.Projects)
+	assert.Equal([]string{}, todo.Tags)
 	assert.Equal([]string{}, todo.Contexts)
 }
 
@@ -81,7 +81,7 @@ func TestListbyProject(t *testing.T) {
 	// create three todos w/wo a project
 	app.AddTodo("this is a test +testme")
 	app.AddTodo("this is a test +testmetoo @work")
-	app.AddTodo("this is a test with no projects")
+	app.AddTodo("this is a test with no tags")
 	app.CompleteTodo("c 1")
 
 	// simulate listTodos
@@ -109,7 +109,7 @@ func TestListbyContext(t *testing.T) {
 	// create three todos w/wo a context
 	app.AddTodo("this is a test +testme")
 	app.AddTodo("this is a test +testmetoo @work")
-	app.AddTodo("this is a test with no projects")
+	app.AddTodo("this is a test with no tags")
 	app.CompleteTodo("c 1")
 
 	// simulate listTodos
@@ -121,8 +121,8 @@ func TestListbyContext(t *testing.T) {
 
 	// work context has 1 todo and it has a project of testmetoo
 	assert.Equal(1, len(grouped.Groups["work"]))
-	assert.Equal(1, len(grouped.Groups["work"][0].Projects))
-	assert.Equal("testmetoo", grouped.Groups["work"][0].Projects[0])
+	assert.Equal(1, len(grouped.Groups["work"][0].Tags))
+	assert.Equal("testmetoo", grouped.Groups["work"][0].Tags[0])
 
 	// There are two todos with no context
 	assert.Equal(2, len(grouped.Groups["No contexts"]))

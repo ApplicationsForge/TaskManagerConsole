@@ -8,7 +8,7 @@ const ISO8601_TIMESTAMP_FORMAT = "2006-01-02T15:04:05Z07:00"
 type Todo struct {
 	Id            int      `json:"id"`
 	Subject       string   `json:"subject"`
-	Projects      []string `json:"projects"`
+	Tags          []string `json:"tags"`
 	Contexts      []string `json:"contexts"`
 	Due           string   `json:"due"`
 	Status        string   `json:"status"`

@@ -37,7 +37,7 @@ func usage() {
 	fmt.Println("  You can also optionally specify a due date.")
 	fmt.Println("  Specify a due date by putting 'due <date>' at the end, where <date> is in (tod|today|tom|tomorrow|mon|tue|wed|thu|fri|sat|sun)")
 	fmt.Println("\n  Examples for adding a todo:")
-	yellow.Println("\ttodo a Meeting with @bob about +importantPrject due today")
+	yellow.Println("\ttodo a Meeting with @bob about +importantProject due today")
 	yellow.Println("\ttodo a +work +verify did @john fix the build\\?")
 
 	blueBold.Println("\nListing todos")

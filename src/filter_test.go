@@ -8,7 +8,7 @@ import (
 
 func TestFilterArchived(t *testing.T) {
 	assert := assert.New(t)
-	store := &FileStore{FileLocation: "todos.json"}
+	store := &FileStore{FileLocation: "tasks.json"}
 	list := &TodoList{}
 	todos, _ := store.Load()
 	list.Load(todos)
@@ -20,7 +20,7 @@ func TestFilterArchived(t *testing.T) {
 
 func TestFilterUnarchivedByDefault(t *testing.T) {
 	assert := assert.New(t)
-	store := &FileStore{FileLocation: "todos.json"}
+	store := &FileStore{FileLocation: "tasks.json"}
 	list := &TodoList{}
 	todos, _ := store.Load()
 	list.Load(todos)
@@ -32,7 +32,7 @@ func TestFilterUnarchivedByDefault(t *testing.T) {
 
 func TestFilterShowArchivedWhenWeAskForCompleted(t *testing.T) {
 	assert := assert.New(t)
-	store := &FileStore{FileLocation: "todos.json"}
+	store := &FileStore{FileLocation: "tasks.json"}
 	list := &TodoList{}
 	todos, _ := store.Load()
 	list.Load(todos)
@@ -45,7 +45,7 @@ func TestFilterShowArchivedWhenWeAskForCompleted(t *testing.T) {
 
 func TestGetArchived(t *testing.T) {
 	assert := assert.New(t)
-	store := &FileStore{FileLocation: "todos.json"}
+	store := &FileStore{FileLocation: "tasks.json"}
 	list := &TodoList{}
 	todos, _ := store.Load()
 	list.Load(todos)
@@ -57,7 +57,7 @@ func TestGetArchived(t *testing.T) {
 
 func TestGetUnarchived(t *testing.T) {
 	assert := assert.New(t)
-	store := &FileStore{FileLocation: "todos.json"}
+	store := &FileStore{FileLocation: "tasks.json"}
 	list := &TodoList{}
 	todos, _ := store.Load()
 	list.Load(todos)

@@ -49,7 +49,7 @@ func TestMaxId(t *testing.T) {
 func TestIndexOf(t *testing.T) {
 	assert := assert.New(t)
 	todo := &Todo{Subject: "Grant"}
-	store := &FileStore{FileLocation: "todos.json"}
+	store := &FileStore{FileLocation: "tasks.json"}
 	list := &TodoList{}
 	todos, _ := store.Load()
 	list.Load(todos)
@@ -60,7 +60,7 @@ func TestIndexOf(t *testing.T) {
 
 func TestDelete(t *testing.T) {
 	assert := assert.New(t)
-	store := &FileStore{FileLocation: "todos.json"}
+	store := &FileStore{FileLocation: "tasks.json"}
 	list := &TodoList{}
 	todos, _ := store.Load()
 	list.Load(todos)
@@ -71,7 +71,7 @@ func TestDelete(t *testing.T) {
 
 func TestComplete(t *testing.T) {
 	assert := assert.New(t)
-	store := &FileStore{FileLocation: "todos.json"}
+	store := &FileStore{FileLocation: "tasks.json"}
 	list := &TodoList{}
 	todos, _ := store.Load()
 	list.Load(todos)
@@ -82,7 +82,7 @@ func TestComplete(t *testing.T) {
 
 func TestArchive(t *testing.T) {
 	assert := assert.New(t)
-	store := &FileStore{FileLocation: "todos.json"}
+	store := &FileStore{FileLocation: "tasks.json"}
 	list := &TodoList{}
 	todos, _ := store.Load()
 	list.Load(todos)
@@ -92,7 +92,7 @@ func TestArchive(t *testing.T) {
 }
 func TestUnarchive(t *testing.T) {
 	assert := assert.New(t)
-	store := &FileStore{FileLocation: "todos.json"}
+	store := &FileStore{FileLocation: "tasks.json"}
 	list := &TodoList{}
 	todos, _ := store.Load()
 	list.Load(todos)
@@ -103,7 +103,7 @@ func TestUnarchive(t *testing.T) {
 
 func TestUncomplete(t *testing.T) {
 	assert := assert.New(t)
-	store := &FileStore{FileLocation: "todos.json"}
+	store := &FileStore{FileLocation: "tasks.json"}
 	list := &TodoList{}
 	todos, _ := store.Load()
 	list.Load(todos)
@@ -131,7 +131,7 @@ func TestGarbageCollect(t *testing.T) {
 
 func TestPrioritizeNotInTodosJson(t *testing.T) {
 	assert := assert.New(t)
-	store := &FileStore{FileLocation: "todos.json"}
+	store := &FileStore{FileLocation: "tasks.json"}
 	list := &TodoList{}
 	todos, _ := store.Load()
 	list.Load(todos)

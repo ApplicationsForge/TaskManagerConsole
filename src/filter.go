@@ -13,16 +13,16 @@ func NewFilter(todos []*Todo) *TodoFilter {
 func (f *TodoFilter) Filter(input string) []*Todo {
 	f.Todos = f.filterArchived(input)
 	f.Todos = f.filterPrioritized(input)
-	f.Todos = f.filterProjects(input)
+	f.Todos = f.filterTags(input)
 	f.Todos = f.filterContexts(input)
 	f.Todos = NewDateFilter(f.Todos).FilterDate(input)
 
 	return f.Todos
 }
 
-func (t *TodoFilter) isFilteringByProjects(input string) bool {
+func (t *TodoFilter) isFilteringByTags(input string) bool {
 	parser := &Parser{}
-	return len(parser.Projects(input)) > 0
+	return len(parser.Tags(input)) > 0
 }
 
 func (t *TodoFilter) isFilteringByContexts(input string) bool {
@@ -55,17 +55,17 @@ func (f *TodoFilter) filterPrioritized(input string) []*Todo {
 	}
 }
 
-func (f *TodoFilter) filterProjects(input string) []*Todo {
-	if !f.isFilteringByProjects(input) {
+func (f *TodoFilter) filterTags(input string) []*Todo {
+	if !f.isFilteringByTags(input) {
 		return f.Todos
 	}
 	parser := &Parser{}
-	projects := parser.Projects(input)
+	tags := parser.Tags(input)
 	var ret []*Todo
 
 	for _, todo := range f.Todos {
-		for _, todoProject := range todo.Projects {
-			for _, project := range projects {
+		for _, todoProject := range todo.Tags {
+			for _, project := range tags {
 				if project == todoProject {
 					ret = AddTodoIfNotThere(ret, todo)
 				}

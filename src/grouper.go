@@ -30,18 +30,18 @@ func (g *Grouper) GroupByContext(todos []*Todo) *GroupedTodos {
 func (g *Grouper) GroupByProject(todos []*Todo) *GroupedTodos {
 	groups := map[string][]*Todo{}
 
-	allProjects := []string{}
+	allTags := []string{}
 
 	for _, todo := range todos {
-		allProjects = AddIfNotThere(allProjects, todo.Projects)
+		allTags = AddIfNotThere(allTags, todo.Tags)
 	}
 
 	for _, todo := range todos {
-		for _, project := range todo.Projects {
+		for _, project := range todo.Tags {
 			groups[project] = append(groups[project], todo)
 		}
-		if len(todo.Projects) == 0 {
-			groups["No projects"] = append(groups["No projects"], todo)
+		if len(todo.Tags) == 0 {
+			groups["No Tags"] = append(groups["No Tags"], todo)
 		}
 	}
 	return &GroupedTodos{Groups: groups}

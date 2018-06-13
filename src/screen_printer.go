@@ -76,7 +76,7 @@ func (f *ScreenPrinter) formatDue(due string, isPriority bool) string {
 
 	if err != nil {
 		fmt.Println(err)
-		fmt.Println("This may due to the corruption of .todos.json file.")
+		fmt.Println("This may due to the corruption of tasks.json file.")
 		os.Exit(-1)
 	}
 
