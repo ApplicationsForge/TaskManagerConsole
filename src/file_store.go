@@ -19,12 +19,12 @@ func NewFileStore() *FileStore {
 
 func (f *FileStore) Initialize() {
 	if f.FileLocation == "" {
-		f.FileLocation = ".todos.json"
+		f.FileLocation = "tasks.json"
 	}
 
 	_, err := ioutil.ReadFile(f.FileLocation)
 	if err == nil {
-		fmt.Println("It looks like a .todos.json file already exists!  Doing nothing.")
+		fmt.Println("It looks like a tasks.json file already exists!  Doing nothing.")
 		os.Exit(0)
 	}
 	if err := ioutil.WriteFile(f.FileLocation, []byte("[]"), 0644); err != nil {
@@ -67,9 +67,9 @@ func (f *FileStore) Save(todos []*Todo) {
 }
 
 func getLocation() string {
-	localrepo := ".todos.json"
+	localrepo := "tasks.json"
 	usr, _ := user.Current()
-	homerepo := fmt.Sprintf("%s/.todos.json", usr.HomeDir)
+	homerepo := fmt.Sprintf("%s/tasks.json", usr.HomeDir)
 	_, ferr := os.Stat(localrepo)
 
 	if ferr == nil {
