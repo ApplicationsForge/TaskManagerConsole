@@ -138,8 +138,9 @@ func usage() {
 	yellow.Println("\ttodo gc")
 	fmt.Println("\tDeletes all archived todos.\n")
 
-	fmt.Println("Todolist was lovingly crafted by Grant Ammons (https://twitter.com/gammons).")
-	fmt.Println("For full documentation, please visit http://todolist.site")
+	fmt.Println("\tTaskTerminal is developed by ApplicationsForge (https://github.com/ApplicationsForge).")
+	fmt.Println("\tTaskTerminal is based on todolist (https://github.com/gammons/todolist) by Grant Ammons (https://twitter.com/gammons).")
+	//fmt.Println("For full documentation, please visit http://todolist.site")
 }
 
 func routeInput(command string, input string) {
