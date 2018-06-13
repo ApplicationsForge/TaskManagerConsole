@@ -1,4 +1,4 @@
-package todolist
+package taskterminal
 
 import (
 	"fmt"
@@ -24,21 +24,21 @@ func NewScreenPrinter() *ScreenPrinter {
 	return formatter
 }
 
-func (f *ScreenPrinter) Print(groupedTodos *GroupedTodos, printNotes bool) {
+func (f *ScreenPrinter) Print(groupedTasks *GroupedTasks, printNotes bool) {
 	cyan := color.New(color.FgCyan).SprintFunc()
 
 	var keys []string
-	for key := range groupedTodos.Groups {
+	for key := range groupedTasks.Groups {
 		keys = append(keys, key)
 	}
 	sort.Strings(keys)
 
 	for _, key := range keys {
 		fmt.Fprintf(f.Writer, "\n %s\n", cyan(key))
-		for _, todo := range groupedTodos.Groups[key] {
-			f.printTodo(todo)
+		for _, task := range groupedTasks.Groups[key] {
+			f.printTask(task)
 			if printNotes {
-				for nid, note := range todo.Notes {
+				for nid, note := range task.Notes {
 					fmt.Fprintf(f.Writer, "   %s\t%s\t\n",
 						cyan(strconv.Itoa(nid)), note)
 				}
@@ -48,16 +48,16 @@ func (f *ScreenPrinter) Print(groupedTodos *GroupedTodos, printNotes bool) {
 	f.Writer.Flush()
 }
 
-func (f *ScreenPrinter) printTodo(todo *Todo) {
+func (f *ScreenPrinter) printTask(task *Task) {
 	yellow := color.New(color.FgYellow)
-	if todo.IsPriority {
+	if task.IsPriority {
 		yellow.Add(color.Bold, color.Italic)
 	}
 	fmt.Fprintf(f.Writer, " %s\t%s\t%s\t%s\t\n",
-		yellow.SprintFunc()(strconv.Itoa(todo.Id)),
-		f.formatCompleted(todo.Status),
-		f.formatDue(todo.Due, todo.IsPriority),
-		f.formatSubject(todo.Subject, todo.IsPriority))
+		yellow.SprintFunc()(strconv.Itoa(task.Id)),
+		f.formatCompleted(task.Status),
+		f.formatDue(task.Due, task.IsPriority),
+		f.formatSubject(task.Subject, task.IsPriority))
 }
 
 func (f *ScreenPrinter) formatDue(due string, isPriority bool) string {

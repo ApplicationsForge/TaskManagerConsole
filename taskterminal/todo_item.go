@@ -1,11 +1,11 @@
-package todolist
+package taskterminal
 
 import "time"
 
 // Timestamp format to include date, time with timezone support. Easy to parse
 const ISO8601_TIMESTAMP_FORMAT = "2006-01-02T15:04:05Z07:00"
 
-type Todo struct {
+type Task struct {
 	Id            int      `json:"id"`
 	Subject       string   `json:"subject"`
 	Tags          []string `json:"tags"`
@@ -18,15 +18,15 @@ type Todo struct {
 	Notes         []string `json:"notes"`
 }
 
-func NewTodo() *Todo {
-	return &Todo{Status: "ToDo", Archived: false, IsPriority: false}
+func NewTask() *Task {
+	return &Task{Status: "ToDo", Archived: false, IsPriority: false}
 }
 
-func (t Todo) Valid() bool {
+func (t Task) Valid() bool {
 	return (t.Subject != "")
 }
 
-func (t Todo) CalculateDueTime() time.Time {
+func (t Task) CalculateDueTime() time.Time {
 	if t.Due != "" {
 		parsedTime, _ := time.Parse("2006-01-02", t.Due)
 		return parsedTime
@@ -36,30 +36,30 @@ func (t Todo) CalculateDueTime() time.Time {
 	}
 }
 
-func (t *Todo) ChangeStatus(status string) {
+func (t *Task) ChangeStatus(status string) {
 	if len(status) > 0 {
 		t.Status = status
 		t.CompletedDate = timestamp(time.Now()).Format(ISO8601_TIMESTAMP_FORMAT)
 	}
 }
 
-func (t *Todo) Archive() {
+func (t *Task) Archive() {
 	t.Archived = true
 }
 
-func (t *Todo) Unarchive() {
+func (t *Task) Unarchive() {
 	t.Archived = false
 }
 
-func (t *Todo) Prioritize() {
+func (t *Task) Prioritize() {
 	t.IsPriority = true
 }
 
-func (t *Todo) Unprioritize() {
+func (t *Task) Unprioritize() {
 	t.IsPriority = false
 }
 
-func (t Todo) CompletedDateToDate() string {
+func (t Task) CompletedDateToDate() string {
 	parsedTime, _ := time.Parse(ISO8601_TIMESTAMP_FORMAT, t.CompletedDate)
 	return parsedTime.Format("2006-01-02")
 }

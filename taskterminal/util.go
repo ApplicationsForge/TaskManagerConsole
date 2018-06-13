@@ -1,4 +1,4 @@
-package todolist
+package taskterminal
 
 import "time"
 
@@ -17,7 +17,7 @@ func AddIfNotThere(arr []string, items []string) []string {
 	return arr
 }
 
-func AddTodoIfNotThere(arr []*Todo, item *Todo) []*Todo {
+func AddTaskIfNotThere(arr []*Task, item *Task) []*Task {
 	there := false
 	for _, arrItem := range arr {
 		if item.Id == arrItem.Id {

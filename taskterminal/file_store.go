@@ -1,4 +1,4 @@
-package todolist
+package taskterminal
 
 import (
 	"encoding/json"
@@ -31,24 +31,24 @@ func (f *FileStore) Initialize() {
 		fmt.Println("Error writing json file", err)
 		os.Exit(1)
 	}
-	fmt.Println("Todo repo initialized.")
+	fmt.Println("Task repo initialized.")
 }
 
-func (f *FileStore) Load() ([]*Todo, error) {
+func (f *FileStore) Load() ([]*Task, error) {
 	if f.FileLocation == "" {
 		f.FileLocation = getLocation()
 	}
 
 	data, err := ioutil.ReadFile(f.FileLocation)
 	if err != nil {
-		fmt.Println("No todo file found!")
-		fmt.Println("Initialize a new todo repo by running 'todolist init'")
+		fmt.Println("No task file found!")
+		fmt.Println("Initialize a new task repo by running './TaskTerminal init'")
 		os.Exit(0)
 		return nil, err
 	}
 
-	var todos []*Todo
-	jerr := json.Unmarshal(data, &todos)
+	var tasks []*Task
+	jerr := json.Unmarshal(data, &tasks)
 	if jerr != nil {
 		fmt.Println("Error reading json data", jerr)
 		os.Exit(1)
@@ -56,11 +56,11 @@ func (f *FileStore) Load() ([]*Todo, error) {
 	}
 	f.Loaded = true
 
-	return todos, nil
+	return tasks, nil
 }
 
-func (f *FileStore) Save(todos []*Todo) {
-	data, _ := json.Marshal(todos)
+func (f *FileStore) Save(tasks []*Task) {
+	data, _ := json.Marshal(tasks)
 	if err := ioutil.WriteFile(f.FileLocation, []byte(data), 0644); err != nil {
 		fmt.Println("Error writing json file", err)
 	}

@@ -1,4 +1,4 @@
-package todolist
+package taskterminal
 
 import (
 	"fmt"
@@ -11,17 +11,17 @@ import (
 
 func TestParseSubject(t *testing.T) {
 	parser := &Parser{}
-	todo := parser.ParseNewTodo("do this thing")
-	if todo.Subject != "do this thing" {
-		t.Error("Expected todo.Subject to equal 'do this thing'")
+	task := parser.ParseNewTask("do this thing")
+	if task.Subject != "do this thing" {
+		t.Error("Expected task.Subject to equal 'do this thing'")
 	}
 }
 
 func TestParseSubjectWithDue(t *testing.T) {
 	parser := &Parser{}
-	todo := parser.ParseNewTodo("do this thing due tomorrow")
-	if todo.Subject != "do this thing" {
-		t.Error("Expected todo.Subject to equal 'do this thing', got ", todo.Subject)
+	task := parser.ParseNewTask("do this thing due tomorrow")
+	if task.Subject != "do this thing" {
+		t.Error("Expected task.Subject to equal 'do this thing', got ", task.Subject)
 	}
 }
 
@@ -42,124 +42,124 @@ func TestParseExpandTags(t *testing.T) {
 
 func TestParseTags(t *testing.T) {
 	parser := &Parser{}
-	todo := parser.ParseNewTodo("do this thing +tag1 +tag2 +專案3 +tag-name due tomorrow")
-	if len(todo.Tags) != 4 {
+	task := parser.ParseNewTask("do this thing +tag1 +tag2 +專案3 +tag-name due tomorrow")
+	if len(task.Tags) != 4 {
 		t.Error("Expected Tags length to be 3")
 	}
-	if todo.Tags[0] != "tag1" {
-		t.Error("todo.Tags[0] should equal 'tag1' but got", todo.Tags[0])
+	if task.Tags[0] != "tag1" {
+		t.Error("task.Tags[0] should equal 'tag1' but got", task.Tags[0])
 	}
-	if todo.Tags[1] != "tag2" {
-		t.Error("todo.Tags[1] should equal 'tag2' but got", todo.Tags[1])
+	if task.Tags[1] != "tag2" {
+		t.Error("task.Tags[1] should equal 'tag2' but got", task.Tags[1])
 	}
-	if todo.Tags[2] != "專案3" {
-		t.Error("todo.Tags[2] should equal '專案3' but got", todo.Tags[2])
+	if task.Tags[2] != "專案3" {
+		t.Error("task.Tags[2] should equal '專案3' but got", task.Tags[2])
 	}
-	if todo.Tags[3] != "tag-name" {
-		t.Error("todo.Tags[3] should equal 'tag-name' but got", todo.Tags[3])
+	if task.Tags[3] != "tag-name" {
+		t.Error("task.Tags[3] should equal 'tag-name' but got", task.Tags[3])
 	}
 }
 
 func TestParseContexts(t *testing.T) {
 	parser := &Parser{}
-	todo := parser.ParseNewTodo("do this thing with @bob and @mary due tomorrow")
-	if len(todo.Contexts) != 2 {
+	task := parser.ParseNewTask("do this thing with @bob and @mary due tomorrow")
+	if len(task.Contexts) != 2 {
 		t.Error("Expected Tags length to be 2")
 	}
-	if todo.Contexts[0] != "bob" {
-		t.Error("todo.Contexts[0] should equal 'mary' but got", todo.Contexts[0])
+	if task.Contexts[0] != "bob" {
+		t.Error("task.Contexts[0] should equal 'mary' but got", task.Contexts[0])
 	}
-	if todo.Contexts[1] != "mary" {
-		t.Error("todo.Contexts[1] should equal 'mary' but got", todo.Contexts[1])
+	if task.Contexts[1] != "mary" {
+		t.Error("task.Contexts[1] should equal 'mary' but got", task.Contexts[1])
 	}
 }
 
 func TestParseAddNote(t *testing.T) {
 	parser := &Parser{}
-	todo := parser.ParseNewTodo("add write the test functions")
+	task := parser.ParseNewTask("add write the test functions")
 
-	b1 := parser.ParseAddNote(todo, "an 1 TestPasrseAddNote")
-	b2 := parser.ParseAddNote(todo, "an 1 TestPasrseDeleteNote")
-	b3 := parser.ParseAddNote(todo, "an 1 TestPasrseEditNote")
+	b1 := parser.ParseAddNote(task, "an 1 TestPasrseAddNote")
+	b2 := parser.ParseAddNote(task, "an 1 TestPasrseDeleteNote")
+	b3 := parser.ParseAddNote(task, "an 1 TestPasrseEditNote")
 
 	if !b1 || !b2 || !b3 {
-		t.Error("Fail adding notes, expected 3 notes but", len(todo.Notes))
+		t.Error("Fail adding notes, expected 3 notes but", len(task.Notes))
 	}
 }
 
 func TestParseDeleteNote(t *testing.T) {
 	parser := &Parser{}
-	todo := parser.ParseNewTodo("add buy notebook")
+	task := parser.ParseNewTask("add buy notebook")
 
-	todo.Notes = append(todo.Notes, "ASUStek")
-	todo.Notes = append(todo.Notes, "Apple")
-	todo.Notes = append(todo.Notes, "Dell")
-	todo.Notes = append(todo.Notes, "Acer")
+	task.Notes = append(task.Notes, "ASUStek")
+	task.Notes = append(task.Notes, "Apple")
+	task.Notes = append(task.Notes, "Dell")
+	task.Notes = append(task.Notes, "Acer")
 
-	b1 := parser.ParseDeleteNote(todo, "dn 1 1")
-	b2 := parser.ParseDeleteNote(todo, "dn 1 1")
+	b1 := parser.ParseDeleteNote(task, "dn 1 1")
+	b2 := parser.ParseDeleteNote(task, "dn 1 1")
 
 	if !b1 || !b2 {
-		t.Error("Fail deleting notes, expected 2 notes left but", len(todo.Notes))
+		t.Error("Fail deleting notes, expected 2 notes left but", len(task.Notes))
 	}
 
-	if todo.Notes[0] != "ASUStek" || todo.Notes[1] != "Acer" {
-		t.Error("Fail deleting notes,", todo.Notes[0], "and", todo.Notes[1], "are left")
+	if task.Notes[0] != "ASUStek" || task.Notes[1] != "Acer" {
+		t.Error("Fail deleting notes,", task.Notes[0], "and", task.Notes[1], "are left")
 	}
 }
 
 func TestParseEditNote(t *testing.T) {
 	parser := &Parser{}
-	todo := parser.ParseNewTodo("add record the weather")
+	task := parser.ParseNewTask("add record the weather")
 
-	todo.Notes = append(todo.Notes, "Aug 29 Wed")
-	todo.Notes = append(todo.Notes, "Cloudy")
-	todo.Notes = append(todo.Notes, "40°C")
-	todo.Notes = append(todo.Notes, "Tokyo")
+	task.Notes = append(task.Notes, "Aug 29 Wed")
+	task.Notes = append(task.Notes, "Cloudy")
+	task.Notes = append(task.Notes, "40°C")
+	task.Notes = append(task.Notes, "Tokyo")
 
-	parser.ParseEditNote(todo, "en 1 0 Aug 29 Tue")
-	if todo.Notes[0] != "Aug 29 Tue" {
-		t.Error("Fail editing notes, note 0 should be \"Aug 29 Tue\" but got", todo.Notes[0])
+	parser.ParseEditNote(task, "en 1 0 Aug 29 Tue")
+	if task.Notes[0] != "Aug 29 Tue" {
+		t.Error("Fail editing notes, note 0 should be \"Aug 29 Tue\" but got", task.Notes[0])
 	}
 
-	parser.ParseEditNote(todo, "en 1 1 Sunny")
-	if todo.Notes[1] != "Sunny" {
-		t.Error("Fail editing notes, note 1 should be \"Sunny\" but got", todo.Notes[1])
+	parser.ParseEditNote(task, "en 1 1 Sunny")
+	if task.Notes[1] != "Sunny" {
+		t.Error("Fail editing notes, note 1 should be \"Sunny\" but got", task.Notes[1])
 	}
 
-	parser.ParseEditNote(todo, "en 1 2 22°C")
-	if todo.Notes[2] != "22°C" {
-		t.Error("Fail editing notes, note 2 should be \"22°C\" but got", todo.Notes[2])
+	parser.ParseEditNote(task, "en 1 2 22°C")
+	if task.Notes[2] != "22°C" {
+		t.Error("Fail editing notes, note 2 should be \"22°C\" but got", task.Notes[2])
 	}
 
-	parser.ParseEditNote(todo, "en 1 3 Seoul")
-	if todo.Notes[3] != "Seoul" {
-		t.Error("Fail editing notes, note 3 should be \"Seoul\" but got", todo.Notes[3])
+	parser.ParseEditNote(task, "en 1 3 Seoul")
+	if task.Notes[3] != "Seoul" {
+		t.Error("Fail editing notes, note 3 should be \"Seoul\" but got", task.Notes[3])
 	}
 }
 
 func TestHandleNotes(t *testing.T) {
 	parser := &Parser{}
-	todo := parser.ParseNewTodo("add search engine survey")
+	task := parser.ParseNewTask("add search engine survey")
 
-	if !parser.ParseAddNote(todo, "an 1 www.google.com") {
+	if !parser.ParseAddNote(task, "an 1 www.google.com") {
 		t.Error("Expected Notes to be added")
 	}
-	if todo.Notes[0] != "www.google.com" {
-		t.Error("Expected note 1 to be 'www.google.com' but got", todo.Notes[0])
+	if task.Notes[0] != "www.google.com" {
+		t.Error("Expected note 1 to be 'www.google.com' but got", task.Notes[0])
 	}
 
-	if !parser.ParseEditNote(todo, "en 1 0 www.duckduckgo.com") {
+	if !parser.ParseEditNote(task, "en 1 0 www.duckduckgo.com") {
 		t.Error("Expected Notes to be editted")
 	}
-	if todo.Notes[0] != "www.duckduckgo.com" {
-		t.Error("Expected note 1 to be 'www.duckduckgo.com' but got", todo.Notes[0])
+	if task.Notes[0] != "www.duckduckgo.com" {
+		t.Error("Expected note 1 to be 'www.duckduckgo.com' but got", task.Notes[0])
 	}
 
-	if !parser.ParseDeleteNote(todo, "dn 1 0") {
+	if !parser.ParseDeleteNote(task, "dn 1 0") {
 		t.Error("Expected Notes to be deleted")
 	}
-	if len(todo.Notes) != 0 {
+	if len(task.Notes) != 0 {
 		t.Error("Expected no note")
 	}
 }
@@ -169,11 +169,11 @@ func TestDueToday(t *testing.T) {
 	parser := &Parser{}
 	expectedDate := bod(time.Now()).Format("2006-01-02")
 
-	todo := parser.ParseNewTodo("do this thing with @bob and @mary due today")
-	assert.Equal(expectedDate, todo.Due)
+	task := parser.ParseNewTask("do this thing with @bob and @mary due today")
+	assert.Equal(expectedDate, task.Due)
 
-	todo = parser.ParseNewTodo("do this thing with @bob and @mary due tod")
-	assert.Equal(expectedDate, todo.Due)
+	task = parser.ParseNewTask("do this thing with @bob and @mary due tod")
+	assert.Equal(expectedDate, task.Due)
 }
 
 func TestDueTomorrow(t *testing.T) {
@@ -181,27 +181,27 @@ func TestDueTomorrow(t *testing.T) {
 	parser := &Parser{}
 	expectedDate := bod(time.Now()).AddDate(0, 0, 1).Format("2006-01-02")
 
-	todo := parser.ParseNewTodo("do this thing with @bob and @mary due tomorrow")
-	assert.Equal(expectedDate, todo.Due)
+	task := parser.ParseNewTask("do this thing with @bob and @mary due tomorrow")
+	assert.Equal(expectedDate, task.Due)
 
-	todo = parser.ParseNewTodo("do this thing with @bob and @mary due tom")
-	assert.Equal(expectedDate, todo.Due)
+	task = parser.ParseNewTask("do this thing with @bob and @mary due tom")
+	assert.Equal(expectedDate, task.Due)
 }
 
 func TestDueSpecific(t *testing.T) {
 	assert := assert.New(t)
 	parser := &Parser{}
-	todo := parser.ParseNewTodo("do this thing with @bob and @mary due jun 1")
+	task := parser.ParseNewTask("do this thing with @bob and @mary due jun 1")
 	year := strconv.Itoa(time.Now().Year())
-	assert.Equal(fmt.Sprintf("%s-06-01", year), todo.Due)
+	assert.Equal(fmt.Sprintf("%s-06-01", year), task.Due)
 }
 
 func TestDueSpecificEuropeanDate(t *testing.T) {
 	assert := assert.New(t)
 	parser := &Parser{}
-	todo := parser.ParseNewTodo("do this thing with @bob and @mary due 1 jun")
+	task := parser.ParseNewTask("do this thing with @bob and @mary due 1 jun")
 	year := strconv.Itoa(time.Now().Year())
-	assert.Equal(fmt.Sprintf("%s-06-01", year), todo.Due)
+	assert.Equal(fmt.Sprintf("%s-06-01", year), task.Due)
 }
 
 func TestMondayOnSunday(t *testing.T) {
@@ -276,63 +276,63 @@ func TestDueIntelligentlyChoosesCorrectYear(t *testing.T) {
 	assert.Equal("2017-01-10", parser.parseArbitraryDate("jan 10", decemberTime))
 }
 
-func TestParseEditTodoJustDate(t *testing.T) {
+func TestParseEditTaskJustDate(t *testing.T) {
 	assert := assert.New(t)
 	parser := &Parser{}
-	todo := NewTodo()
+	task := NewTask()
 	tomorrow := time.Now().AddDate(0, 0, 1).Format("2006-01-02")
 
-	parser.ParseEditTodo(todo, "e 24 due tom")
+	parser.ParseEditTask(task, "e 24 due tom")
 
-	assert.Equal(todo.Due, tomorrow)
+	assert.Equal(task.Due, tomorrow)
 }
 
-func TestParseEditTodoJustDateDoesNotEditExistingSubject(t *testing.T) {
+func TestParseEditTaskJustDateDoesNotEditExistingSubject(t *testing.T) {
 	assert := assert.New(t)
 	parser := &Parser{}
-	todo := NewTodo()
-	todo.Subject = "pick up the trash"
+	task := NewTask()
+	task.Subject = "pick up the trash"
 	tomorrow := time.Now().AddDate(0, 0, 1).Format("2006-01-02")
 
-	parser.ParseEditTodo(todo, "e 24 due tom")
+	parser.ParseEditTask(task, "e 24 due tom")
 
-	assert.Equal(todo.Due, tomorrow)
-	assert.Equal(todo.Subject, "pick up the trash")
+	assert.Equal(task.Due, tomorrow)
+	assert.Equal(task.Subject, "pick up the trash")
 }
 
-func TestParseEditTodoJustSubject(t *testing.T) {
+func TestParseEditTaskJustSubject(t *testing.T) {
 	assert := assert.New(t)
 	parser := &Parser{}
-	todo := &Todo{Subject: "pick up the trash", Due: "2016-11-25"}
+	task := &Task{Subject: "pick up the trash", Due: "2016-11-25"}
 
-	parser.ParseEditTodo(todo, "e 24 changed the todo")
+	parser.ParseEditTask(task, "e 24 changed the task")
 
-	assert.Equal(todo.Due, "2016-11-25")
-	assert.Equal(todo.Subject, "changed the todo")
+	assert.Equal(task.Due, "2016-11-25")
+	assert.Equal(task.Subject, "changed the task")
 }
 
-func TestParseEditTodoSubjectUpdatesTagsAndContexts(t *testing.T) {
+func TestParseEditTaskSubjectUpdatesTagsAndContexts(t *testing.T) {
 	assert := assert.New(t)
 	parser := &Parser{}
-	todo := &Todo{
+	task := &Task{
 		Subject:  "pick up the +trash with @dad",
 		Due:      "2016-11-25",
 		Tags: []string{"trash"},
 		Contexts: []string{"dad"},
 	}
 
-	parser.ParseEditTodo(todo, "e 24 get the +garbage with @mom")
+	parser.ParseEditTask(task, "e 24 get the +garbage with @mom")
 
-	assert.Equal(todo.Due, "2016-11-25")
-	assert.Equal(todo.Subject, "get the +garbage with @mom")
-	assert.Equal(todo.Tags, []string{"garbage"})
-	assert.Equal(todo.Contexts, []string{"mom"})
+	assert.Equal(task.Due, "2016-11-25")
+	assert.Equal(task.Subject, "get the +garbage with @mom")
+	assert.Equal(task.Tags, []string{"garbage"})
+	assert.Equal(task.Contexts, []string{"mom"})
 }
 
-func TestParseEditTodoWithSubjectAndDue(t *testing.T) {
+func TestParseEditTaskWithSubjectAndDue(t *testing.T) {
 	assert := assert.New(t)
 	parser := &Parser{}
-	todo := &Todo{
+	task := &Task{
 		Subject:  "pick up the +trash with @dad",
 		Due:      "2016-11-25",
 		Tags: []string{"trash"},
@@ -340,8 +340,8 @@ func TestParseEditTodoWithSubjectAndDue(t *testing.T) {
 	}
 	tomorrow := time.Now().AddDate(0, 0, 1).Format("2006-01-02")
 
-	parser.ParseEditTodo(todo, "e 24 get the +garbage with @mom due tom")
+	parser.ParseEditTask(task, "e 24 get the +garbage with @mom due tom")
 
-	assert.Equal(todo.Due, tomorrow)
-	assert.Equal(todo.Subject, "get the +garbage with @mom")
+	assert.Equal(task.Due, tomorrow)
+	assert.Equal(task.Subject, "get the +garbage with @mom")
 }

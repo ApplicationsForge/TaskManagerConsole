@@ -1,4 +1,4 @@
-package todolist
+package taskterminal
 
 import (
 	"testing"
@@ -10,12 +10,12 @@ func TestGroupByContext(t *testing.T) {
 	assert := assert.New(t)
 
 	store := &FileStore{FileLocation: "tasks.json"}
-	list := &TodoList{}
-	todos, _ := store.Load()
-	list.Load(todos)
+	list := &TaskTerminal{}
+	tasks, _ := store.Load()
+	list.Load(tasks)
 
 	grouper := &Grouper{}
-	grouped := grouper.GroupByContext(list.Todos())
+	grouped := grouper.GroupByContext(list.Tasks())
 
 	assert.Equal(2, len(grouped.Groups["root"]), "")
 	assert.Equal(1, len(grouped.Groups["more"]), "")
@@ -25,12 +25,12 @@ func TestGroupByTag(t *testing.T) {
 	assert := assert.New(t)
 
 	store := &FileStore{FileLocation: "tasks.json"}
-	list := &TodoList{}
-	todos, _ := store.Load()
-	list.Load(todos)
+	list := &TaskTerminal{}
+	tasks, _ := store.Load()
+	list.Load(tasks)
 
 	grouper := &Grouper{}
-	grouped := grouper.GroupByTag(list.Todos())
+	grouped := grouper.GroupByTag(list.Tasks())
 
 	assert.Equal(2, len(grouped.Groups["test1"]), "")
 }

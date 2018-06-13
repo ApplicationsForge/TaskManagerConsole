@@ -1,4 +1,4 @@
-package todolist
+package taskterminal
 
 import (
 	"encoding/json"
@@ -29,9 +29,9 @@ func (w *Webapp) Run() {
 func setupRoutes() *httprouter.Router {
 	router := httprouter.New()
 	router.GET("/", IndexScaffold)
-	router.OPTIONS("/todos", TodoOptions)
-	router.GET("/todos", GetTodos)
-	router.POST("/todos", SaveTodos)
+	router.OPTIONS("/tasks", TaskOptions)
+	router.GET("/tasks", GetTasks)
+	router.POST("/tasks", SaveTasks)
 	router.NotFound = http.HandlerFunc(RedirectScaffold)
 	return router
 }
@@ -44,7 +44,7 @@ func IndexScaffold(w http.ResponseWriter, r *http.Request, _ httprouter.Params) 
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <link rel="stylesheet" href="https://bootswatch.com/flatly/bootstrap.min.css">
-    <title>Todolist</title>
+    <title>TaskTerminal</title>
     <link href="` + urlFor("main.css") + `" rel="stylesheet">
   </head>
   <body>
@@ -65,7 +65,7 @@ func RedirectScaffold(w http.ResponseWriter, r *http.Request) {
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <link rel="stylesheet" href="https://bootswatch.com/flatly/bootstrap.min.css">
-    <title>Todolist</title>
+    <title>TaskTerminal</title>
     <link href="` + urlFor("main.css") + `" rel="stylesheet">
   </head>
   <body>
@@ -86,29 +86,29 @@ func RedirectToIndex(w http.ResponseWriter, r *http.Request) {
 	http.Redirect(w, r, S3URL+r.URL.Path, 301)
 }
 
-func GetTodos(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
+func GetTasks(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
 	w.Header().Set("Access-Control-Allow-Origin", "*")
 	app := NewApp()
 	app.Load()
-	json, _ := json.Marshal(app.TodoList.Data)
+	json, _ := json.Marshal(app.TaskTerminal.Data)
 	fmt.Fprintf(w, string(json))
 }
-func TodoOptions(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
+func TaskOptions(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
 	w.Header().Set("Access-Control-Allow-Headers", "*")
 	w.Header().Set("Access-Control-Allow-Origin", "*")
 	fmt.Fprintf(w, "")
 }
 
-func SaveTodos(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
+func SaveTasks(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
 	w.Header().Set("Access-Control-Allow-Headers", "*")
 	w.Header().Set("Access-Control-Allow-Origin", "*")
 	decoder := json.NewDecoder(r.Body)
-	var todos []*Todo
-	err := decoder.Decode(&todos)
+	var tasks []*Task
+	err := decoder.Decode(&tasks)
 	if err != nil {
 		log.Fatal("encountered an error parsing json, ", err)
 	}
 	app := NewApp()
-	app.TodoStore.Load()
-	app.TodoStore.Save(todos)
+	app.TaskStore.Load()
+	app.TaskStore.Save(tasks)
 }

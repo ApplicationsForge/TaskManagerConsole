@@ -6,7 +6,7 @@ import (
 	"strings"
 
 	"github.com/fatih/color"
-	"github.com/ApplicationsForge/TaskTerminal/src"
+	"github.com/ApplicationsForge/TaskTerminal/taskterminal"
 	"github.com/skratchdot/open-golang/open"
 )
 
@@ -144,44 +144,44 @@ func usage() {
 }
 
 func routeInput(command string, input string) {
-	app := todolist.NewApp()
+	app := taskterminal.NewApp()
 	switch command {
 	case "l", "ln", "list", "agenda":
-		app.ListTodos(input)
+		app.ListTasks(input)
 	case "a", "add":
-		app.AddTodo(input)
+		app.AddTask(input)
 	case "done":
-		app.AddDoneTodo(input)
+		app.AddDoneTask(input)
 	case "d", "delete":
-		app.DeleteTodo(input)
+		app.DeleteTask(input)
 	case "cs", "ch_status", "change_status":
-		app.ChangeTodoStatus(input)
+		app.ChangeTaskStatus(input)
 	case "ar", "archive":
-		app.ArchiveTodo(input)
+		app.ArchiveTask(input)
 	case "uar", "unarchive":
-		app.UnarchiveTodo(input)
+		app.UnarchiveTask(input)
 	case "ac":
 		app.ArchiveCompleted()
 	case "e", "edit":
-		app.EditTodo(input)
+		app.EditTask(input)
 	case "ex", "expand":
-		app.ExpandTodo(input)
+		app.ExpandTask(input)
 	case "an", "n", "dn", "en":
 		app.HandleNotes(input)
 	case "gc":
 		app.GarbageCollect()
 	case "p", "prioritize":
-		app.PrioritizeTodo(input)
+		app.PrioritizeTask(input)
 	case "up", "unprioritize":
-		app.UnprioritizeTodo(input)
+		app.UnprioritizeTask(input)
 	case "init":
 		app.InitializeRepo()
 	case "web":
 		if err := app.Load(); err != nil {
 			os.Exit(1)
 		} else {
-			web := todolist.NewWebapp()
-			fmt.Println("Now serving todolist web.\nHead to http://localhost:7890 to see your todo list!")
+			web := taskterminal.NewWebapp()
+			fmt.Println("Now serving taskterminal web.\nHead to http://localhost:7890 to see your task list!")
 			open.Start("http://localhost:7890")
 			web.Run()
 		}

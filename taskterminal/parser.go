@@ -1,4 +1,4 @@
-package todolist
+package taskterminal
 
 import (
 	"fmt"
@@ -11,24 +11,24 @@ import (
 
 type Parser struct{}
 
-func (p *Parser) ParseNewTodo(input string) *Todo {
+func (p *Parser) ParseNewTask(input string) *Task {
 	r, _ := regexp.Compile(`^(add|a)(\s*|)`)
 	input = r.ReplaceAllString(input, "")
 	if input == "" {
 		return nil
 	}
 
-	todo := NewTodo()
-	todo.Subject = p.Subject(input)
-	todo.Tags = p.Tags(input)
-	todo.Contexts = p.Contexts(input)
+	task := NewTask()
+	task.Subject = p.Subject(input)
+	task.Tags = p.Tags(input)
+	task.Contexts = p.Contexts(input)
 	if p.hasDue(input) {
-		todo.Due = p.Due(input, time.Now())
+		task.Due = p.Due(input, time.Now())
 	}
-	return todo
+	return task
 }
 
-func (p *Parser) ParseEditTodo(todo *Todo, input string) bool {
+func (p *Parser) ParseEditTask(task *Task, input string) bool {
 	r := regexp.MustCompile(`(\w+)\s+(\d+)(\s+(.*))?`)
 	matches := r.FindStringSubmatch(input)
 	if len(matches) < 3 {
@@ -39,12 +39,12 @@ func (p *Parser) ParseEditTodo(todo *Todo, input string) bool {
 	subjectOnly := matches[3]
 
 	if p.Subject(subjectOnly) != "" {
-		todo.Subject = p.Subject(subjectOnly)
-		todo.Tags = p.Tags(subjectOnly)
-		todo.Contexts = p.Contexts(subjectOnly)
+		task.Subject = p.Subject(subjectOnly)
+		task.Tags = p.Tags(subjectOnly)
+		task.Contexts = p.Contexts(subjectOnly)
 	}
 	if p.hasDue(subjectOnly) {
-		todo.Due = p.Due(subjectOnly, time.Now())
+		task.Due = p.Due(subjectOnly, time.Now())
 	}
 	return true
 }
@@ -83,18 +83,18 @@ func (p *Parser) Contexts(input string) []string {
 	return p.matchWords(input, r)
 }
 
-func (p *Parser) ParseAddNote(todo *Todo, input string) bool {
+func (p *Parser) ParseAddNote(task *Task, input string) bool {
 	r, _ := regexp.Compile(`^an\s+\d+\s+(.*)`)
 	matches := r.FindStringSubmatch(input)
 	if len(matches) != 2 {
 		return false
 	}
 
-	todo.Notes = append(todo.Notes, matches[1])
+	task.Notes = append(task.Notes, matches[1])
 	return true
 }
 
-func (p *Parser) ParseDeleteNote(todo *Todo, input string) bool {
+func (p *Parser) ParseDeleteNote(task *Task, input string) bool {
 	r, _ := regexp.Compile(`^dn\s+\d+\s+(\d+)`)
 	matches := r.FindStringSubmatch(input)
 	if len(matches) != 2 {
@@ -106,16 +106,16 @@ func (p *Parser) ParseDeleteNote(todo *Todo, input string) bool {
 		return false
 	}
 
-	for id, _ := range todo.Notes {
+	for id, _ := range task.Notes {
 		if id == rmid {
-			todo.Notes = append(todo.Notes[:rmid], todo.Notes[rmid+1:]...)
+			task.Notes = append(task.Notes[:rmid], task.Notes[rmid+1:]...)
 			return true
 		}
 	}
 	return false
 }
 
-func (p *Parser) ParseEditNote(todo *Todo, input string) bool {
+func (p *Parser) ParseEditNote(task *Task, input string) bool {
 	r, _ := regexp.Compile(`^en\s+\d+\s+(\d+)\s+(.*)`)
 	matches := r.FindStringSubmatch(input)
 	if len(matches) != 3 {
@@ -127,16 +127,16 @@ func (p *Parser) ParseEditNote(todo *Todo, input string) bool {
 		return false
 	}
 
-	for id, _ := range todo.Notes {
+	for id, _ := range task.Notes {
 		if id == edid {
-			todo.Notes[id] = matches[2]
+			task.Notes[id] = matches[2]
 			return true
 		}
 	}
 	return false
 }
 
-func (p *Parser) ParseShowNote(todo *Todo, input string) bool {
+func (p *Parser) ParseShowNote(task *Task, input string) bool {
 	r, _ := regexp.Compile(`^n\s+\d+`)
 	matches := r.FindStringSubmatch(input)
 	if len(matches) != 1 {

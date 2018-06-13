@@ -1,4 +1,4 @@
-package todolist
+package taskterminal
 
 import (
 	"testing"
@@ -8,27 +8,27 @@ import (
 
 func TestNextId(t *testing.T) {
 	assert := assert.New(t)
-	todo := &Todo{Subject: "testing", Completed: false, Archived: false}
-	list := &TodoList{}
+	task := &Task{Subject: "testing", Completed: false, Archived: false}
+	list := &TaskTerminal{}
 	assert.Equal(1, list.NextId())
-	list.Add(todo)
+	list.Add(task)
 	assert.Equal(2, list.NextId())
 }
 
-func TestNextIdWhenTodoDeleted(t *testing.T) {
+func TestNextIdWhenTaskDeleted(t *testing.T) {
 	assert := assert.New(t)
-	todo := &Todo{Subject: "testing", Completed: false, Archived: false}
-	todo2 := &Todo{Subject: "testing2", Completed: false, Archived: false}
-	todo3 := &Todo{Subject: "testing3", Completed: false, Archived: false}
-	list := &TodoList{}
+	task := &Task{Subject: "testing", Completed: false, Archived: false}
+	task2 := &Task{Subject: "testing2", Completed: false, Archived: false}
+	task3 := &Task{Subject: "testing3", Completed: false, Archived: false}
+	list := &TaskTerminal{}
 
-	list.Add(todo)
-	list.Add(todo2)
-	list.Add(todo3)
+	list.Add(task)
+	list.Add(task2)
+	list.Add(task3)
 
 	list.Delete(2)
 	assert.Equal(2, list.NextId())
-	list.Add(todo2)
+	list.Add(task2)
 	assert.Equal(4, list.NextId())
 	list.Delete(1)
 	assert.Equal(1, list.NextId())
@@ -36,34 +36,34 @@ func TestNextIdWhenTodoDeleted(t *testing.T) {
 
 func TestMaxId(t *testing.T) {
 	assert := assert.New(t)
-	todo := &Todo{Subject: "testing", Completed: false, Archived: false}
-	todo2 := &Todo{Subject: "testing 2", Completed: false, Archived: false}
-	list := &TodoList{}
+	task := &Task{Subject: "testing", Completed: false, Archived: false}
+	task2 := &Task{Subject: "testing 2", Completed: false, Archived: false}
+	list := &TaskTerminal{}
 	assert.Equal(0, list.MaxId())
-	list.Add(todo)
+	list.Add(task)
 	assert.Equal(1, list.MaxId())
-	list.Add(todo2)
+	list.Add(task2)
 	assert.Equal(2, list.MaxId())
 }
 
 func TestIndexOf(t *testing.T) {
 	assert := assert.New(t)
-	todo := &Todo{Subject: "Grant"}
+	task := &Task{Subject: "Grant"}
 	store := &FileStore{FileLocation: "tasks.json"}
-	list := &TodoList{}
-	todos, _ := store.Load()
-	list.Load(todos)
+	list := &TaskTerminal{}
+	tasks, _ := store.Load()
+	list.Load(tasks)
 
-	assert.Equal(-1, list.IndexOf(todo))
+	assert.Equal(-1, list.IndexOf(task))
 	assert.Equal(0, list.IndexOf(list.Data[0]))
 }
 
 func TestDelete(t *testing.T) {
 	assert := assert.New(t)
 	store := &FileStore{FileLocation: "tasks.json"}
-	list := &TodoList{}
-	todos, _ := store.Load()
-	list.Load(todos)
+	list := &TaskTerminal{}
+	tasks, _ := store.Load()
+	list.Load(tasks)
 	assert.Equal(2, len(list.Data))
 	list.Delete(1)
 	assert.Equal(1, len(list.Data))
@@ -72,9 +72,9 @@ func TestDelete(t *testing.T) {
 func TestComplete(t *testing.T) {
 	assert := assert.New(t)
 	store := &FileStore{FileLocation: "tasks.json"}
-	list := &TodoList{}
-	todos, _ := store.Load()
-	list.Load(todos)
+	list := &TaskTerminal{}
+	tasks, _ := store.Load()
+	list.Load(tasks)
 	assert.Equal(false, list.FindById(1).Completed)
 	list.Complete(1)
 	assert.Equal(true, list.FindById(1).Completed)
@@ -83,9 +83,9 @@ func TestComplete(t *testing.T) {
 func TestArchive(t *testing.T) {
 	assert := assert.New(t)
 	store := &FileStore{FileLocation: "tasks.json"}
-	list := &TodoList{}
-	todos, _ := store.Load()
-	list.Load(todos)
+	list := &TaskTerminal{}
+	tasks, _ := store.Load()
+	list.Load(tasks)
 	assert.Equal(false, list.FindById(2).Archived)
 	list.Archive(2)
 	assert.Equal(true, list.FindById(2).Archived)
@@ -93,9 +93,9 @@ func TestArchive(t *testing.T) {
 func TestUnarchive(t *testing.T) {
 	assert := assert.New(t)
 	store := &FileStore{FileLocation: "tasks.json"}
-	list := &TodoList{}
-	todos, _ := store.Load()
-	list.Load(todos)
+	list := &TaskTerminal{}
+	tasks, _ := store.Load()
+	list.Load(tasks)
 	assert.Equal(true, list.FindById(1).Archived)
 	list.Unarchive(1)
 	assert.Equal(false, list.FindById(1).Archived)
@@ -104,9 +104,9 @@ func TestUnarchive(t *testing.T) {
 func TestUncomplete(t *testing.T) {
 	assert := assert.New(t)
 	store := &FileStore{FileLocation: "tasks.json"}
-	list := &TodoList{}
-	todos, _ := store.Load()
-	list.Load(todos)
+	list := &TaskTerminal{}
+	tasks, _ := store.Load()
+	list.Load(tasks)
 	assert.Equal(true, list.FindById(2).Completed)
 	list.Uncomplete(2)
 	assert.Equal(false, list.FindById(2).Completed)
@@ -114,13 +114,13 @@ func TestUncomplete(t *testing.T) {
 
 func TestGarbageCollect(t *testing.T) {
 	assert := assert.New(t)
-	list := &TodoList{}
-	todo := &Todo{Subject: "testing", Completed: false, Archived: true}
-	todo2 := &Todo{Subject: "testing2", Completed: false, Archived: false}
-	todo3 := &Todo{Subject: "testing3", Completed: false, Archived: true}
-	list.Add(todo)
-	list.Add(todo2)
-	list.Add(todo3)
+	list := &TaskTerminal{}
+	task := &Task{Subject: "testing", Completed: false, Archived: true}
+	task2 := &Task{Subject: "testing2", Completed: false, Archived: false}
+	task3 := &Task{Subject: "testing3", Completed: false, Archived: true}
+	list.Add(task)
+	list.Add(task2)
+	list.Add(task3)
 
 	list.GarbageCollect()
 
@@ -129,20 +129,20 @@ func TestGarbageCollect(t *testing.T) {
 	assert.Equal(2, list.MaxId())
 }
 
-func TestPrioritizeNotInTodosJson(t *testing.T) {
+func TestPrioritizeNotInTasksJson(t *testing.T) {
 	assert := assert.New(t)
 	store := &FileStore{FileLocation: "tasks.json"}
-	list := &TodoList{}
-	todos, _ := store.Load()
-	list.Load(todos)
+	list := &TaskTerminal{}
+	tasks, _ := store.Load()
+	list.Load(tasks)
 	assert.Equal(false, list.FindById(2).IsPriority)
 }
 
-func TestPrioritizeTodo(t *testing.T) {
+func TestPrioritizeTask(t *testing.T) {
 	assert := assert.New(t)
-	list := &TodoList{}
-	todo := &Todo{Archived: false, Completed: false, Subject: "testing", IsPriority: false}
-	list.Add(todo)
+	list := &TaskTerminal{}
+	task := &Task{Archived: false, Completed: false, Subject: "testing", IsPriority: false}
+	list.Add(task)
 	list.Prioritize(1)
 	assert.Equal(true, list.FindById(1).IsPriority)
 	list.Unprioritize(1)

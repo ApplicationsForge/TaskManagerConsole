@@ -1,4 +1,4 @@
-package todolist
+package taskterminal
 
 import (
 	"fmt"
@@ -8,71 +8,71 @@ import (
 )
 
 type App struct {
-	TodoStore Store
+	TaskStore Store
 	Printer   Printer
-	TodoList  *TodoList
+	TaskTerminal  *TaskTerminal
 }
 
 func NewApp() *App {
 	app := &App{
-		TodoList:  &TodoList{},
+		TaskTerminal:  &TaskTerminal{},
 		Printer:   NewScreenPrinter(),
-		TodoStore: NewFileStore(),
+		TaskStore: NewFileStore(),
 	}
 	return app
 }
 
 func (a *App) InitializeRepo() {
-	a.TodoStore.Initialize()
+	a.TaskStore.Initialize()
 }
 
-func (a *App) AddTodo(input string) {
+func (a *App) AddTask(input string) {
 	a.Load()
 	parser := &Parser{}
-	todo := parser.ParseNewTodo(input)
-	if todo == nil {
-		fmt.Println("I need more information. Try something like 'todo a chat with @bob due tom'")
+	task := parser.ParseNewTask(input)
+	if task == nil {
+		fmt.Println("I need more information. Try something like 'task a chat with @bob due tom'")
 		return
 	}
 
-	id := a.TodoList.NextId()
-	a.TodoList.Add(todo)
+	id := a.TaskTerminal.NextId()
+	a.TaskTerminal.Add(task)
 	a.Save()
-	fmt.Printf("Todo %d added.\n", id)
+	fmt.Printf("Task %d added.\n", id)
 }
 
-// AddDoneTodo Adds a todo and immediately completed it.
-func (a *App) AddDoneTodo(input string) {
+// AddDoneTask Adds a task and immediately completed it.
+func (a *App) AddDoneTask(input string) {
 	a.Load()
 
 	r, _ := regexp.Compile(`^(done)(\s*|)`)
 	input = r.ReplaceAllString(input, "")
 	parser := &Parser{}
-	todo := parser.ParseNewTodo(input)
-	if todo == nil {
-		fmt.Println("I need more information. Try something like 'todo done chating with @bob'")
+	task := parser.ParseNewTask(input)
+	if task == nil {
+		fmt.Println("I need more information. Try something like 'task done chating with @bob'")
 		return
 	}
 
-	id := a.TodoList.NextId()
-	a.TodoList.Add(todo)
-	a.TodoList.ChangeTaskStatus("Done", id)
+	id := a.TaskTerminal.NextId()
+	a.TaskTerminal.Add(task)
+	a.TaskTerminal.ChangeTaskStatus("Done", id)
 	a.Save()
-	fmt.Printf("Completed Todo %d added.\n", id)
+	fmt.Printf("Completed Task %d added.\n", id)
 }
 
-func (a *App) DeleteTodo(input string) {
+func (a *App) DeleteTask(input string) {
 	a.Load()
 	ids := a.getIds(input)
 	if len(ids) == 0 {
 		return
 	}
-	a.TodoList.Delete(ids...)
+	a.TaskTerminal.Delete(ids...)
 	a.Save()
-	fmt.Printf("%s deleted.\n", pluralize(len(ids), "Todo", "Todos"))
+	fmt.Printf("%s deleted.\n", pluralize(len(ids), "Task", "Tasks"))
 }
 
-func (a *App) ChangeTodoStatus(input string) {
+func (a *App) ChangeTaskStatus(input string) {
 	a.Load()
 	ids := a.getIds(input)
 	if len(ids) == 0 {
@@ -80,53 +80,53 @@ func (a *App) ChangeTodoStatus(input string) {
 	}
 
 	statusIndex := a.getStatus(input)
-	a.TodoList.ChangeTaskStatus(statusIndex, ids...)
+	a.TaskTerminal.ChangeTaskStatus(statusIndex, ids...)
 	a.Save()
-	fmt.Println("Todo status changed.")
+	fmt.Println("Task status changed.")
 }
 
-func (a *App) ArchiveTodo(input string) {
+func (a *App) ArchiveTask(input string) {
 	a.Load()
 	ids := a.getIds(input)
 	if len(ids) == 0 {
 		return
 	}
-	a.TodoList.Archive(ids...)
+	a.TaskTerminal.Archive(ids...)
 	a.Save()
-	fmt.Println("Todo archived.")
+	fmt.Println("Task archived.")
 }
 
-func (a *App) UnarchiveTodo(input string) {
+func (a *App) UnarchiveTask(input string) {
 	a.Load()
 	ids := a.getIds(input)
 	if len(ids) == 0 {
 		return
 	}
-	a.TodoList.Unarchive(ids...)
+	a.TaskTerminal.Unarchive(ids...)
 	a.Save()
-	fmt.Println("Todo unarchived.")
+	fmt.Println("Task unarchived.")
 }
 
-func (a *App) EditTodo(input string) {
+func (a *App) EditTask(input string) {
 	a.Load()
 	id := a.getId(input)
 	if id == -1 {
 		return
 	}
-	todo := a.TodoList.FindById(id)
-	if todo == nil {
+	task := a.TaskTerminal.FindById(id)
+	if task == nil {
 		fmt.Println("No such id.")
 		return
 	}
 	parser := &Parser{}
 
-	if parser.ParseEditTodo(todo, input) {
+	if parser.ParseEditTask(task, input) {
 		a.Save()
-		fmt.Println("Todo updated.")
+		fmt.Println("Task updated.")
 	}
 }
 
-func (a *App) ExpandTodo(input string) {
+func (a *App) ExpandTask(input string) {
 	a.Load()
 	id := a.getId(input)
 	parser := &Parser{}
@@ -135,22 +135,22 @@ func (a *App) ExpandTodo(input string) {
 	}
 
 	commonTag := parser.ExpandTag(input)
-	todos := strings.LastIndex(input, ":")
-	if commonTag == "" || len(input) <= todos+1 || todos == -1 {
-		fmt.Println("I'm expecting a format like \"todolist ex <tag>: <todo1>, <todo2>, ...\"")
+	tasks := strings.LastIndex(input, ":")
+	if commonTag == "" || len(input) <= tasks+1 || tasks == -1 {
+		fmt.Println("I'm expecting a format like \"taskterminal ex <tag>: <task1>, <task2>, ...\"")
 		return
 	}
 
-	newTodos := strings.Split(input[todos+1:], ",")
+	newTasks := strings.Split(input[tasks+1:], ",")
 
-	for _, todo := range newTodos {
-		args := []string{"add ", commonTag, " ", todo}
-		a.AddTodo(strings.Join(args, ""))
+	for _, task := range newTasks {
+		args := []string{"add ", commonTag, " ", task}
+		a.AddTask(strings.Join(args, ""))
 	}
 
-	a.TodoList.Delete(id)
+	a.TaskTerminal.Delete(id)
 	a.Save()
-	fmt.Println("Todo expanded.")
+	fmt.Println("Task expanded.")
 }
 
 func (a *App) HandleNotes(input string) {
@@ -159,23 +159,23 @@ func (a *App) HandleNotes(input string) {
 	if id == -1 {
 		return
 	}
-	todo := a.TodoList.FindById(id)
-	if todo == nil {
+	task := a.TaskTerminal.FindById(id)
+	if task == nil {
 		fmt.Println("No such id.")
 		return
 	}
 	parser := &Parser{}
 
-	if parser.ParseAddNote(todo, input) {
+	if parser.ParseAddNote(task, input) {
 		fmt.Println("Note added.")
-	} else if parser.ParseDeleteNote(todo, input) {
+	} else if parser.ParseDeleteNote(task, input) {
 		fmt.Println("Note deleted.")
-	} else if parser.ParseEditNote(todo, input) {
+	} else if parser.ParseEditNote(task, input) {
 		fmt.Println("Note edited.")
-	} else if parser.ParseShowNote(todo, input) {
-		groups := map[string][]*Todo{}
-		groups[""] = append(groups[""], todo)
-		a.Printer.Print(&GroupedTodos{Groups: groups}, true)
+	} else if parser.ParseShowNote(task, input) {
+		groups := map[string][]*Task{}
+		groups[""] = append(groups[""], task)
+		a.Printer.Print(&GroupedTasks{Groups: groups}, true)
 		return
 	}
 	a.Save()
@@ -183,44 +183,44 @@ func (a *App) HandleNotes(input string) {
 
 func (a *App) ArchiveCompleted() {
 	a.Load()
-	for _, todo := range a.TodoList.Todos() {
-		if (todo.Status != "ToDo") {
-			todo.Archive()
+	for _, task := range a.TaskTerminal.Tasks() {
+		if (task.Status != "Task") {
+			task.Archive()
 		}
 	}
 	a.Save()
-	fmt.Println("All completed todos have been archived.")
+	fmt.Println("All completed tasks have been archived.")
 }
 
-func (a *App) ListTodos(input string) {
+func (a *App) ListTasks(input string) {
 	a.Load()
-	filtered := NewFilter(a.TodoList.Todos()).Filter(input)
+	filtered := NewFilter(a.TaskTerminal.Tasks()).Filter(input)
 	grouped := a.getGroups(input, filtered)
 
 	re, _ := regexp.Compile(`^ln`)
 	a.Printer.Print(grouped, re.MatchString(input))
 }
 
-func (a *App) PrioritizeTodo(input string) {
+func (a *App) PrioritizeTask(input string) {
 	a.Load()
 	ids := a.getIds(input)
 	if len(ids) == 0 {
 		return
 	}
-	a.TodoList.Prioritize(ids...)
+	a.TaskTerminal.Prioritize(ids...)
 	a.Save()
-	fmt.Println("Todo prioritized.")
+	fmt.Println("Task prioritized.")
 }
 
-func (a *App) UnprioritizeTodo(input string) {
+func (a *App) UnprioritizeTask(input string) {
 	a.Load()
 	ids := a.getIds(input)
 	if len(ids) == 0 {
 		return
 	}
-	a.TodoList.Unprioritize(ids...)
+	a.TaskTerminal.Unprioritize(ids...)
 	a.Save()
-	fmt.Println("Todo un-prioritized.")
+	fmt.Println("Task un-prioritized.")
 }
 
 func (a *App) getId(input string) int {
@@ -277,39 +277,39 @@ func (a *App) parseRangedIds(input string) (ids []int, err error) {
 	return ids, err
 }
 
-func (a *App) getGroups(input string, todos []*Todo) *GroupedTodos {
+func (a *App) getGroups(input string, tasks []*Task) *GroupedTasks {
 	grouper := &Grouper{}
 	contextRegex, _ := regexp.Compile(`by c.*$`)
 	tagRegex, _ := regexp.Compile(`by t.*$`)
 
-	var grouped *GroupedTodos
+	var grouped *GroupedTasks
 
 	if contextRegex.MatchString(input) {
-		grouped = grouper.GroupByContext(todos)
+		grouped = grouper.GroupByContext(tasks)
 	} else if tagRegex.MatchString(input) {
-		grouped = grouper.GroupByTag(todos)
+		grouped = grouper.GroupByTag(tasks)
 	} else {
-		grouped = grouper.GroupByNothing(todos)
+		grouped = grouper.GroupByNothing(tasks)
 	}
 	return grouped
 }
 
 func (a *App) GarbageCollect() {
 	a.Load()
-	a.TodoList.GarbageCollect()
+	a.TaskTerminal.GarbageCollect()
 	a.Save()
 	fmt.Println("Garbage collection complete.")
 }
 
 func (a *App) Load() error {
-	todos, err := a.TodoStore.Load()
+	tasks, err := a.TaskStore.Load()
 	if err != nil {
 		return err
 	}
-	a.TodoList.Load(todos)
+	a.TaskTerminal.Load(tasks)
 	return nil
 }
 
 func (a *App) Save() {
-	a.TodoStore.Save(a.TodoList.Data)
+	a.TaskStore.Save(a.TaskTerminal.Data)
 }
