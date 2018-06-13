@@ -28,35 +28,35 @@ func TestParseSubjectWithDue(t *testing.T) {
 func TestParseExpandTags(t *testing.T) {
 	assert := assert.New(t)
 	parser := &Parser{}
-	correctFormat := parser.ExpandProject("ex 113 +meeting: figures, slides, coffee, suger")
+	correctFormat := parser.ExpandTag("ex 113 +meeting: figures, slides, coffee, suger")
 	assert.Equal("+meeting", correctFormat)
-	wrongFormat1 := parser.ExpandProject("ex 114 +meeting figures, slides, coffee, suger")
+	wrongFormat1 := parser.ExpandTag("ex 114 +meeting figures, slides, coffee, suger")
 	assert.Equal("", wrongFormat1)
-	wrongFormat2 := parser.ExpandProject("ex 115 meeting: figures, slides, coffee, suger")
+	wrongFormat2 := parser.ExpandTag("ex 115 meeting: figures, slides, coffee, suger")
 	assert.Equal("", wrongFormat2)
-	wrongFormat3 := parser.ExpandProject("ex 116 meeting figures, slides, coffee, suger")
+	wrongFormat3 := parser.ExpandTag("ex 116 meeting figures, slides, coffee, suger")
 	assert.Equal("", wrongFormat3)
-	wrongFormat4 := parser.ExpandProject("ex 117 +重要な會議: 図, コーヒー, 砂糖")
+	wrongFormat4 := parser.ExpandTag("ex 117 +重要な會議: 図, コーヒー, 砂糖")
 	assert.Equal("+重要な會議", wrongFormat4)
 }
 
 func TestParseTags(t *testing.T) {
 	parser := &Parser{}
-	todo := parser.ParseNewTodo("do this thing +proj1 +proj2 +專案3 +proj-name due tomorrow")
+	todo := parser.ParseNewTodo("do this thing +tag1 +tag2 +專案3 +tag-name due tomorrow")
 	if len(todo.Tags) != 4 {
 		t.Error("Expected Tags length to be 3")
 	}
-	if todo.Tags[0] != "proj1" {
-		t.Error("todo.Tags[0] should equal 'proj1' but got", todo.Tags[0])
+	if todo.Tags[0] != "tag1" {
+		t.Error("todo.Tags[0] should equal 'tag1' but got", todo.Tags[0])
 	}
-	if todo.Tags[1] != "proj2" {
-		t.Error("todo.Tags[1] should equal 'proj2' but got", todo.Tags[1])
+	if todo.Tags[1] != "tag2" {
+		t.Error("todo.Tags[1] should equal 'tag2' but got", todo.Tags[1])
 	}
 	if todo.Tags[2] != "專案3" {
 		t.Error("todo.Tags[2] should equal '專案3' but got", todo.Tags[2])
 	}
-	if todo.Tags[3] != "proj-name" {
-		t.Error("todo.Tags[3] should equal 'proj-name' but got", todo.Tags[3])
+	if todo.Tags[3] != "tag-name" {
+		t.Error("todo.Tags[3] should equal 'tag-name' but got", todo.Tags[3])
 	}
 }
 

@@ -64,9 +64,9 @@ func (f *TodoFilter) filterTags(input string) []*Todo {
 	var ret []*Todo
 
 	for _, todo := range f.Todos {
-		for _, todoProject := range todo.Tags {
-			for _, project := range tags {
-				if project == todoProject {
+		for _, todoTag := range todo.Tags {
+			for _, tag := range tags {
+				if tag == todoTag {
 					ret = AddTodoIfNotThere(ret, todo)
 				}
 			}

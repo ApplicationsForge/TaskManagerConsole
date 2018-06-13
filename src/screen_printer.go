@@ -104,13 +104,13 @@ func (f *ScreenPrinter) formatSubject(subject string, isPriority bool) string {
 	}
 
 	splitted := strings.Split(subject, " ")
-	projectRegex, _ := regexp.Compile(`\+[\p{L}\d_]+`)
+	tagRegex, _ := regexp.Compile(`\+[\p{L}\d_]+`)
 	contextRegex, _ := regexp.Compile(`\@[\p{L}\d_]+`)
 
 	coloredWords := []string{}
 
 	for _, word := range splitted {
-		if projectRegex.MatchString(word) {
+		if tagRegex.MatchString(word) {
 			coloredWords = append(coloredWords, magenta.SprintFunc()(word))
 		} else if contextRegex.MatchString(word) {
 			coloredWords = append(coloredWords, red.SprintFunc()(word))

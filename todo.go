@@ -70,7 +70,7 @@ func usage() {
 	fmt.Println("  You can group todos by context or tag.")
 	yellow.Println("\ttodo l by c")
 	fmt.Println("\tlists all todos grouped by context\n")
-	yellow.Println("\ttodo l by p")
+	yellow.Println("\ttodo l by t")
 	fmt.Println("\tlists all todos grouped by tag\n")
 
 	cyan.Println("  Grouping and filtering:")
@@ -79,7 +79,7 @@ func usage() {
 	fmt.Println("\tlists all todos due today grouped by context\n")
 	yellow.Println("\ttodo l +tag due this week by c")
 	fmt.Println("\tlists all todos due today for +tag, grouped by context\n")
-	yellow.Println("\ttodo l @frank due tom by p")
+	yellow.Println("\ttodo l @frank due tom by t")
 	fmt.Println("\tlists all todos due tomorrow concerining @frank for +tag, grouped by tag\n")
 
 	blueBold.Println("\nCompleting and uncompleting ")

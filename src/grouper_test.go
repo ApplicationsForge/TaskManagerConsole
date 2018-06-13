@@ -21,7 +21,7 @@ func TestGroupByContext(t *testing.T) {
 	assert.Equal(1, len(grouped.Groups["more"]), "")
 }
 
-func TestGroupByProject(t *testing.T) {
+func TestGroupByTag(t *testing.T) {
 	assert := assert.New(t)
 
 	store := &FileStore{FileLocation: "tasks.json"}
@@ -30,7 +30,7 @@ func TestGroupByProject(t *testing.T) {
 	list.Load(todos)
 
 	grouper := &Grouper{}
-	grouped := grouper.GroupByProject(list.Todos())
+	grouped := grouper.GroupByTag(list.Todos())
 
 	assert.Equal(2, len(grouped.Groups["test1"]), "")
 }

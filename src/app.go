@@ -134,17 +134,17 @@ func (a *App) ExpandTodo(input string) {
 		return
 	}
 
-	commonProject := parser.ExpandProject(input)
+	commonTag := parser.ExpandTag(input)
 	todos := strings.LastIndex(input, ":")
-	if commonProject == "" || len(input) <= todos+1 || todos == -1 {
-		fmt.Println("I'm expecting a format like \"todolist ex <project>: <todo1>, <todo2>, ...\"")
+	if commonTag == "" || len(input) <= todos+1 || todos == -1 {
+		fmt.Println("I'm expecting a format like \"todolist ex <tag>: <todo1>, <todo2>, ...\"")
 		return
 	}
 
 	newTodos := strings.Split(input[todos+1:], ",")
 
 	for _, todo := range newTodos {
-		args := []string{"add ", commonProject, " ", todo}
+		args := []string{"add ", commonTag, " ", todo}
 		a.AddTodo(strings.Join(args, ""))
 	}
 
@@ -280,14 +280,14 @@ func (a *App) parseRangedIds(input string) (ids []int, err error) {
 func (a *App) getGroups(input string, todos []*Todo) *GroupedTodos {
 	grouper := &Grouper{}
 	contextRegex, _ := regexp.Compile(`by c.*$`)
-	projectRegex, _ := regexp.Compile(`by p.*$`)
+	tagRegex, _ := regexp.Compile(`by t.*$`)
 
 	var grouped *GroupedTodos
 
 	if contextRegex.MatchString(input) {
 		grouped = grouper.GroupByContext(todos)
-	} else if projectRegex.MatchString(input) {
-		grouped = grouper.GroupByProject(todos)
+	} else if tagRegex.MatchString(input) {
+		grouped = grouper.GroupByTag(todos)
 	} else {
 		grouped = grouper.GroupByNothing(todos)
 	}

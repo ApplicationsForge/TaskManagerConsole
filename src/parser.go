@@ -58,16 +58,16 @@ func (p *Parser) Subject(input string) string {
 	}
 }
 
-func (p *Parser) ExpandProject(input string) string {
+func (p *Parser) ExpandTag(input string) string {
 	r, _ := regexp.Compile(`(ex|expand) +\d+ +\+[\p{L}\d_-]+:`)
 	pattern := r.FindString(input)
 	if len(pattern) == 0 {
 		return ""
 	}
 
-	newProject := pattern[0 : len(pattern)-1]
-	project := strings.Split(newProject, " ")
-	return project[len(project)-1]
+	newTag := pattern[0 : len(pattern)-1]
+	tag := strings.Split(newTag, " ")
+	return tag[len(tag)-1]
 }
 
 func (p *Parser) Tags(input string) []string {
