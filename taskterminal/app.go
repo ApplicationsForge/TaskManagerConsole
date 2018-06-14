@@ -279,13 +279,13 @@ func (a *App) parseRangedIds(input string) (ids []int, err error) {
 
 func (a *App) getGroups(input string, tasks []*Task) *GroupedTasks {
 	grouper := &Grouper{}
-	contextRegex, _ := regexp.Compile(`by c.*$`)
+	userRegex, _ := regexp.Compile(`by u.*$`)
 	tagRegex, _ := regexp.Compile(`by t.*$`)
 
 	var grouped *GroupedTasks
 
-	if contextRegex.MatchString(input) {
-		grouped = grouper.GroupByContext(tasks)
+	if userRegex.MatchString(input) {
+		grouped = grouper.GroupByUser(tasks)
 	} else if tagRegex.MatchString(input) {
 		grouped = grouper.GroupByTag(tasks)
 	} else {

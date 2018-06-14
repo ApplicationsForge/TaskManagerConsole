@@ -21,7 +21,7 @@ func (p *Parser) ParseNewTask(input string) *Task {
 	task := NewTask()
 	task.Subject = p.Subject(input)
 	task.Tags = p.Tags(input)
-	task.Contexts = p.Contexts(input)
+	task.Users = p.Users(input)
 	if p.hasDue(input) {
 		task.Due = p.Due(input, time.Now())
 	}
@@ -41,7 +41,7 @@ func (p *Parser) ParseEditTask(task *Task, input string) bool {
 	if p.Subject(subjectOnly) != "" {
 		task.Subject = p.Subject(subjectOnly)
 		task.Tags = p.Tags(subjectOnly)
-		task.Contexts = p.Contexts(subjectOnly)
+		task.Users = p.Users(subjectOnly)
 	}
 	if p.hasDue(subjectOnly) {
 		task.Due = p.Due(subjectOnly, time.Now())
@@ -75,7 +75,7 @@ func (p *Parser) Tags(input string) []string {
 	return p.matchWords(input, r)
 }
 
-func (p *Parser) Contexts(input string) []string {
+func (p *Parser) Users(input string) []string {
 	r, err := regexp.Compile(`\@[\p{L}\d_]+`)
 	if err != nil {
 		fmt.Println("regex error", err)

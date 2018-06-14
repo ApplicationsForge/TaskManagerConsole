@@ -6,7 +6,7 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-func TestGroupByContext(t *testing.T) {
+func TestGroupByUser(t *testing.T) {
 	assert := assert.New(t)
 
 	store := &FileStore{FileLocation: "tasks.json"}
@@ -15,7 +15,7 @@ func TestGroupByContext(t *testing.T) {
 	list.Load(tasks)
 
 	grouper := &Grouper{}
-	grouped := grouper.GroupByContext(list.Tasks())
+	grouped := grouper.GroupByUser(list.Tasks())
 
 	assert.Equal(2, len(grouped.Groups["root"]), "")
 	assert.Equal(1, len(grouped.Groups["more"]), "")

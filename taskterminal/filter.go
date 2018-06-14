@@ -14,7 +14,7 @@ func (f *TaskFilter) Filter(input string) []*Task {
 	f.Tasks = f.filterArchived(input)
 	f.Tasks = f.filterPrioritized(input)
 	f.Tasks = f.filterTags(input)
-	f.Tasks = f.filterContexts(input)
+	f.Tasks = f.filterUsers(input)
 	f.Tasks = NewDateFilter(f.Tasks).FilterDate(input)
 
 	return f.Tasks
@@ -25,9 +25,9 @@ func (t *TaskFilter) isFilteringByTags(input string) bool {
 	return len(parser.Tags(input)) > 0
 }
 
-func (t *TaskFilter) isFilteringByContexts(input string) bool {
+func (t *TaskFilter) isFilteringByUsers(input string) bool {
 	parser := &Parser{}
-	return len(parser.Contexts(input)) > 0
+	return len(parser.Users(input)) > 0
 }
 
 func (f *TaskFilter) filterArchived(input string) []*Task {
@@ -75,18 +75,18 @@ func (f *TaskFilter) filterTags(input string) []*Task {
 	return ret
 }
 
-func (f *TaskFilter) filterContexts(input string) []*Task {
-	if !f.isFilteringByContexts(input) {
+func (f *TaskFilter) filterUsers(input string) []*Task {
+	if !f.isFilteringByUsers(input) {
 		return f.Tasks
 	}
 	parser := &Parser{}
-	contexts := parser.Contexts(input)
+	users := parser.Users(input)
 	var ret []*Task
 
 	for _, task := range f.Tasks {
-		for _, taskContext := range task.Contexts {
-			for _, context := range contexts {
-				if context == taskContext {
+		for _, taskUser := range task.Users {
+			for _, user := range users {
+				if user == taskUser {
 					ret = AddTaskIfNotThere(ret, task)
 				}
 			}

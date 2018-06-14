@@ -6,21 +6,21 @@ type GroupedTasks struct {
 	Groups map[string][]*Task
 }
 
-func (g *Grouper) GroupByContext(tasks []*Task) *GroupedTasks {
+func (g *Grouper) GroupByUser(tasks []*Task) *GroupedTasks {
 	groups := map[string][]*Task{}
 
-	allContexts := []string{}
+	allUsers := []string{}
 
 	for _, task := range tasks {
-		allContexts = AddIfNotThere(allContexts, task.Contexts)
+		allUsers = AddIfNotThere(allUsers, task.Users)
 	}
 
 	for _, task := range tasks {
-		for _, context := range task.Contexts {
-			groups[context] = append(groups[context], task)
+		for _, user := range task.Users {
+			groups[user] = append(groups[user], task)
 		}
-		if len(task.Contexts) == 0 {
-			groups["No contexts"] = append(groups["No contexts"], task)
+		if len(task.Users) == 0 {
+			groups["No users"] = append(groups["No users"], task)
 		}
 	}
 

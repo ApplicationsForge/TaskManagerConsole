@@ -9,7 +9,7 @@ type Task struct {
 	Id            int      `json:"id"`
 	Subject       string   `json:"subject"`
 	Tags          []string `json:"tags"`
-	Contexts      []string `json:"contexts"`
+	Users         []string `json:"users"`
 	Due           string   `json:"due"`
 	Status        string   `json:"status"`
 	CompletedDate string   `json:"completedDate"`

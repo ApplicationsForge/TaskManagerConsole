@@ -24,7 +24,7 @@ func TestAddTask(t *testing.T) {
 	assert.Equal(false, task.IsPriority)
 	assert.Equal("", task.CompletedDate)
 	assert.Equal([]string{}, task.Tags)
-	assert.Equal([]string{}, task.Contexts)
+	assert.Equal([]string{}, task.Users)
 }
 
 func TestAddDoneTask(t *testing.T) {
@@ -39,8 +39,8 @@ func TestAddDoneTask(t *testing.T) {
 	assert.Equal(false, task.Archived)
 	assert.Equal(false, task.IsPriority)
 	assert.Equal([]string{}, task.Tags)
-	assert.Equal(1, len(task.Contexts))
-	assert.Equal("pop", task.Contexts[0])
+	assert.Equal(1, len(task.Users))
+	assert.Equal("pop", task.Users[0])
 }
 
 func TestAddTaskWithEuropeanDates(t *testing.T) {
@@ -58,7 +58,7 @@ func TestAddTaskWithEuropeanDates(t *testing.T) {
 	assert.Equal(false, task.IsPriority)
 	assert.Equal("", task.CompletedDate)
 	assert.Equal([]string{}, task.Tags)
-	assert.Equal([]string{}, task.Contexts)
+	assert.Equal([]string{}, task.Users)
 }
 
 func TestAddEmptyTask(t *testing.T) {
@@ -95,42 +95,42 @@ func TestListbyTag(t *testing.T) {
 	assert.Equal(1, len(grouped.Groups["testme"]))
 	assert.Equal(true, grouped.Groups["testme"][0].Completed)
 
-	// testmetoo tag has 1 task and it has a context
+	// testmetoo tag has 1 task and it has a user
 	assert.Equal(1, len(grouped.Groups["testmetoo"]))
-	assert.Equal(1, len(grouped.Groups["testmetoo"][0].Contexts))
-	assert.Equal("work", grouped.Groups["testmetoo"][0].Contexts[0])
+	assert.Equal(1, len(grouped.Groups["testmetoo"][0].Users))
+	assert.Equal("work", grouped.Groups["testmetoo"][0].Users[0])
 }
 
-func TestListbyContext(t *testing.T) {
+func TestListbyUser(t *testing.T) {
 	assert := assert.New(t)
 	app := &App{TaskTerminal: &TaskTerminal{}, TaskStore: &MemoryStore{}}
 	app.Load()
 
-	// create three tasks w/wo a context
+	// create three tasks w/wo a user
 	app.AddTask("this is a test +testme")
 	app.AddTask("this is a test +testmetoo @work")
 	app.AddTask("this is a test with no tags")
 	app.CompleteTask("c 1")
 
 	// simulate listTasks
-	input := "l by c"
+	input := "l by u"
 	filtered := NewFilter(app.TaskTerminal.Tasks()).Filter(input)
 	grouped := app.getGroups(input, filtered)
 
 	assert.Equal(2, len(grouped.Groups))
 
-	// work context has 1 task and it has a tag of testmetoo
+	// work user has 1 task and it has a tag of testmetoo
 	assert.Equal(1, len(grouped.Groups["work"]))
 	assert.Equal(1, len(grouped.Groups["work"][0].Tags))
 	assert.Equal("testmetoo", grouped.Groups["work"][0].Tags[0])
 
-	// There are two tasks with no context
-	assert.Equal(2, len(grouped.Groups["No contexts"]))
+	// There are two tasks with no user
+	assert.Equal(2, len(grouped.Groups["No users"]))
 
-	// check to see if the a tasks with no context contain a
+	// check to see if the a tasks with no user contain a
 	// completed task
 	var hasACompletedTask bool
-	for _, task := range grouped.Groups["No contexts"] {
+	for _, task := range grouped.Groups["No users"] {
 		if task.Completed {
 			hasACompletedTask = true
 		}

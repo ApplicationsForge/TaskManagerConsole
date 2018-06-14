@@ -60,17 +60,17 @@ func TestParseTags(t *testing.T) {
 	}
 }
 
-func TestParseContexts(t *testing.T) {
+func TestParseUsers(t *testing.T) {
 	parser := &Parser{}
 	task := parser.ParseNewTask("do this thing with @bob and @mary due tomorrow")
-	if len(task.Contexts) != 2 {
+	if len(task.Users) != 2 {
 		t.Error("Expected Tags length to be 2")
 	}
-	if task.Contexts[0] != "bob" {
-		t.Error("task.Contexts[0] should equal 'mary' but got", task.Contexts[0])
+	if task.Users[0] != "bob" {
+		t.Error("task.Users[0] should equal 'mary' but got", task.Users[0])
 	}
-	if task.Contexts[1] != "mary" {
-		t.Error("task.Contexts[1] should equal 'mary' but got", task.Contexts[1])
+	if task.Users[1] != "mary" {
+		t.Error("task.Users[1] should equal 'mary' but got", task.Users[1])
 	}
 }
 
@@ -311,14 +311,14 @@ func TestParseEditTaskJustSubject(t *testing.T) {
 	assert.Equal(task.Subject, "changed the task")
 }
 
-func TestParseEditTaskSubjectUpdatesTagsAndContexts(t *testing.T) {
+func TestParseEditTaskSubjectUpdatesTagsAndUsers(t *testing.T) {
 	assert := assert.New(t)
 	parser := &Parser{}
 	task := &Task{
 		Subject:  "pick up the +trash with @dad",
 		Due:      "2016-11-25",
 		Tags: []string{"trash"},
-		Contexts: []string{"dad"},
+		Users: []string{"dad"},
 	}
 
 	parser.ParseEditTask(task, "e 24 get the +garbage with @mom")
@@ -326,7 +326,7 @@ func TestParseEditTaskSubjectUpdatesTagsAndContexts(t *testing.T) {
 	assert.Equal(task.Due, "2016-11-25")
 	assert.Equal(task.Subject, "get the +garbage with @mom")
 	assert.Equal(task.Tags, []string{"garbage"})
-	assert.Equal(task.Contexts, []string{"mom"})
+	assert.Equal(task.Users, []string{"mom"})
 }
 
 func TestParseEditTaskWithSubjectAndDue(t *testing.T) {
@@ -336,7 +336,7 @@ func TestParseEditTaskWithSubjectAndDue(t *testing.T) {
 		Subject:  "pick up the +trash with @dad",
 		Due:      "2016-11-25",
 		Tags: []string{"trash"},
-		Contexts: []string{"dad"},
+		Users: []string{"dad"},
 	}
 	tomorrow := time.Now().AddDate(0, 0, 1).Format("2006-01-02")
 
