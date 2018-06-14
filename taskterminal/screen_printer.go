@@ -81,13 +81,13 @@ func (f *ScreenPrinter) formatDue(due string, isPriority bool) string {
 	}
 
 	if isToday(dueTime) {
-		return blue.SprintFunc()(dueTime.Format("Mon Jan 2"))
+		return blue.SprintFunc()(dueTime.Format("Mon Jan 2 2006"))
 	} else if isTomorrow(dueTime) {
-		return blue.SprintFunc()(dueTime.Format("Mon Jan 2"))
+		return blue.SprintFunc()(dueTime.Format("Mon Jan 2 2006"))
 	} else if isPastDue(dueTime) {
-		return red.SprintFunc()(dueTime.Format("Mon Jan 2"))
+		return red.SprintFunc()(dueTime.Format("Mon Jan 2 2006"))
 	} else {
-		return blue.SprintFunc()(dueTime.Format("Mon Jan 2"))
+		return blue.SprintFunc()(dueTime.Format("Mon Jan 2 2006"))
 	}
 }
 
