@@ -192,6 +192,21 @@ func (a *App) ArchiveCompleted() {
 	fmt.Println("All completed tasks have been archived.")
 }
 
+func (a *App) ArchiveByStatus(input string) {
+	a.Load()
+	str := strings.Split(input, " ")
+	for _, task := range a.TaskTerminal.Tasks(){
+		if(task.Status == str[1]){
+			fmt.Println("Task")
+			fmt.Println(task.Status)
+			fmt.Println("have been archived\n")
+			task.Archive()
+		}
+	}
+	a.Save()
+	fmt.Println("All tasks with this status have been archived")
+}
+
 func (a *App) ListTasks(input string) {
 	a.Load()
 	filtered := NewFilter(a.TaskTerminal.Tasks()).Filter(input)

@@ -158,6 +158,8 @@ func routeInput(command string, input string) {
 		app.ChangeTaskStatus(input)
 	case "ar", "archive":
 		app.ArchiveTask(input)
+	case "as", "archive_status":
+		app.ArchiveByStatus(input)
 	case "uar", "unarchive":
 		app.UnarchiveTask(input)
 	case "ac":
