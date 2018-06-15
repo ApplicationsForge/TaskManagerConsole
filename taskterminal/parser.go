@@ -85,12 +85,13 @@ func (p *Parser) Users(input string) []string {
 	return p.matchWords(input, r)
 }
 
-func (p *Parser) Title(input string) []string {
+func (p *Parser) Title(input string) string {
 	r, err := regexp.Compile(`\#[\p{L}\d_]+`)
 	if err != nil {
 		fmt.Println("regex error", err)
 	}
-	return p.matchWords(input, r)
+	title := r.FindString(input)
+	return title[0:len(title)]
 }
 
 func (p *Parser) ParseAddNote(task *Task, input string) bool {
