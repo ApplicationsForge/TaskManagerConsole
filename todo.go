@@ -45,8 +45,8 @@ func usage() {
 	fmt.Println("\tYou can also optionally specify a due date.")
 	fmt.Println("\tSpecify a due date by putting 'due <date>' at the end, where <date> is in (tod|today|tom|tomorrow|mon|tue|wed|thu|fri|sat|sun)")
 	fmt.Println("\n  Examples for adding a task:")
-	yellow.Println("\t./TaskTerminal a Meeting with @bob about +importantTag due today")
-	yellow.Println("\t./TaskTerminal a +work +verify did @john fix the build\\?")
+	yellow.Println("\t./TaskTerminal a Meeting '#Title1' with @bob about +importantTag due today")
+	yellow.Println("\t./TaskTerminal a '#Task1' +work +verify did @john fix the build\\?")
 
 	blueBold.Println("\nListing tasks")
 	yellow.Println("\t./TaskTerminal l")
