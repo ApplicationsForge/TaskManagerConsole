@@ -96,16 +96,19 @@ func (f *ScreenPrinter) formatSubject(subject string, isPriority bool) string {
 	red := color.New(color.FgRed)
 	magenta := color.New(color.FgMagenta)
 	white := color.New(color.FgWhite)
+	cyan := color.New(color.FgCyan)
 
 	if isPriority {
 		red.Add(color.Bold, color.Italic)
 		magenta.Add(color.Bold, color.Italic)
 		white.Add(color.Bold, color.Italic)
+		cyan.Add(color.Bold, color.Italic)
 	}
 
 	splitted := strings.Split(subject, " ")
 	tagRegex, _ := regexp.Compile(`\+[\p{L}\d_]+`)
 	userRegex, _ := regexp.Compile(`\@[\p{L}\d_]+`)
+	titleRegex, _ := regexp.Compile(`\#[\p{L}\d_]+`)
 
 	coloredWords := []string{}
 
@@ -114,6 +117,8 @@ func (f *ScreenPrinter) formatSubject(subject string, isPriority bool) string {
 			coloredWords = append(coloredWords, magenta.SprintFunc()(word))
 		} else if userRegex.MatchString(word) {
 			coloredWords = append(coloredWords, red.SprintFunc()(word))
+		} else if titleRegex.MatchString(word) {
+			coloredWords = append(coloredWords, cyan.SprintFunc()(word))
 		} else {
 			coloredWords = append(coloredWords, white.SprintFunc()(word))
 		}

@@ -9,10 +9,10 @@ import (
 	"github.com/ApplicationsForge/TaskTerminal/taskterminal"
 	"github.com/skratchdot/open-golang/open"
 )
-
+/*
 const (
 	VERSION = "0.8"
-)
+)*/
 
 func main() {
 	if len(os.Args) <= 1 {
