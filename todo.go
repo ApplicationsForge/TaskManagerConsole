@@ -7,12 +7,7 @@ import (
 
 	"github.com/fatih/color"
 	"github.com/ApplicationsForge/TaskTerminal/taskterminal"
-	"github.com/skratchdot/open-golang/open"
 )
-/*
-const (
-	VERSION = "0.8"
-)*/
 
 func main() {
 	if len(os.Args) <= 1 {
@@ -146,14 +141,10 @@ func usage() {
 	blueBold.Println("\nManipulating notes")
 	yellow.Println("\t./TaskTerminal ln")
 	fmt.Println("\tLists all tasks with their notes")
-	yellow.Println("\t./TaskTerminal an 12 check http://this.web.site")
-	fmt.Println("\tAdds notes \"check http://this.web.site\" to the task with id 12\n")
 	yellow.Println("\t./TaskTerminal n 12")
 	fmt.Println("\tLists notes of the task with id 12\n")
 	yellow.Println("\t./TaskTerminal dn 12 3")
 	fmt.Println("\tDeletes the 3rd note of the task with id 12\n")
-	yellow.Println("\t./TaskTerminal en 12 3 check http://that.web.site")
-	fmt.Println("\tEdits the 3rd note of the task with id 12 to \"http://that.web.site\" \n")
 
 	blueBold.Println("\nDeleting")
 	yellow.Println("\t./TaskTerminal d 33")
@@ -203,14 +194,5 @@ func routeInput(command string, input string) {
 		app.UnprioritizeTask(input)
 	case "init":
 		app.InitializeRepo()
-	case "web":
-		if err := app.Load(); err != nil {
-			os.Exit(1)
-		} else {
-			web := taskterminal.NewWebapp()
-			fmt.Println("Now serving taskterminal web.\nHead to http://localhost:7890 to see your task list!")
-			open.Start("http://localhost:7890")
-			web.Run()
-		}
 	}
 }
