@@ -1,21 +1,19 @@
-# Todolist
+# TaskTerminal
 
 ## Description
-Simple and convinirent todolist, which is use [gammons todolist](https://github.com/gammons/todolist) code.
-Uses as a base for [LightTaskManager project](https://github.com/moevm/gui-1h2018-06)
+Simple and convenient comand line task mamger, based on [gammons todolist](https://github.com/gammons/todolist) project.
 
 ## Installation step
-1. Install Go
-1. Setup `&GOPATH`, `&GOROOT`, `&GOBIN`
-1. `cd &GOPATH`
-1. `mkdir -p /src/github.com/ApplicationsForge & cd /src/github.com/ApplicationsForge`
-1. `git clone git@github.com:ApplicationsForge/TaskTerminal.git`
-1. `go get ./...`
+1. Install Go from [project site](https://golang.omycat.info/)
+1. `cd $HOME`
+1. `mkdir -p go/src/TaskTerminal`
+1. `cd go/src/TaskTerminal`
+1. `git clone https://github.com/ApplicationsForge/TaskTerminal.git`
+1. `cd TaskTerminal`
+1. `go build`
 
 ## Testing installation
-1. `cd $GOBIN`
 1. `./TaskTerminal`
 
 ## License
-
-Todolist is open source, and uses the [MIT license](https://github.com/gammons/todolist/blob/master/LICENSE.md).
+TaskTerminal is open source, and uses the MIT license.
