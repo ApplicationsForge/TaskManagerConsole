@@ -1,4 +1,4 @@
-package taskterminal
+package task_terminal
 
 type Store interface {
 	Initialize()

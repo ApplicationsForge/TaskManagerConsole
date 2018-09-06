@@ -1,4 +1,4 @@
-package taskterminal
+package task_terminal
 
 import "time"
 
@@ -7,7 +7,7 @@ const ISO8601_TIMESTAMP_FORMAT = "2006-01-02T15:04:05Z07:00"
 
 type Task struct {
 	Id            int      `json:"id"`
-	Title         string `json:"title"`
+	Title         string   `json:"title"`
 	Subject       string   `json:"subject"`
 	Tags          []string `json:"tags"`
 	Users         []string `json:"users"`

@@ -1,4 +1,4 @@
-package taskterminal
+package task_terminal
 
 import (
 	"fmt"
@@ -315,10 +315,10 @@ func TestParseEditTaskSubjectUpdatesTagsAndUsers(t *testing.T) {
 	assert := assert.New(t)
 	parser := &Parser{}
 	task := &Task{
-		Subject:  "pick up the +trash with @dad",
-		Due:      "2016-11-25",
-		Tags: []string{"trash"},
-		Users: []string{"dad"},
+		Subject: "pick up the +trash with @dad",
+		Due:     "2016-11-25",
+		Tags:    []string{"trash"},
+		Users:   []string{"dad"},
 	}
 
 	parser.ParseEditTask(task, "e 24 get the +garbage with @mom")
@@ -333,10 +333,10 @@ func TestParseEditTaskWithSubjectAndDue(t *testing.T) {
 	assert := assert.New(t)
 	parser := &Parser{}
 	task := &Task{
-		Subject:  "pick up the +trash with @dad",
-		Due:      "2016-11-25",
-		Tags: []string{"trash"},
-		Users: []string{"dad"},
+		Subject: "pick up the +trash with @dad",
+		Due:     "2016-11-25",
+		Tags:    []string{"trash"},
+		Users:   []string{"dad"},
 	}
 	tomorrow := time.Now().AddDate(0, 0, 1).Format("2006-01-02")
 

@@ -5,8 +5,9 @@ import (
 	"os"
 	"strings"
 
+	"task_terminal"
+
 	"github.com/fatih/color"
-	"github.com/ApplicationsForge/TaskTerminal/taskterminal"
 )
 
 func main() {
@@ -160,7 +161,7 @@ func usage() {
 }
 
 func routeInput(command string, input string) {
-	app := taskterminal.NewApp()
+	app := task_terminal.NewApp()
 	switch command {
 	case "l", "ln", "list", "agenda":
 		app.ListTasks(input)

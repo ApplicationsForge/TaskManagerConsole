@@ -1,4 +1,4 @@
-package taskterminal
+package task_terminal
 
 import (
 	"fmt"
@@ -128,5 +128,5 @@ func (f *ScreenPrinter) formatSubject(subject string, isPriority bool) string {
 }
 
 func (f *ScreenPrinter) formatCompleted(status string) string {
-	return "[" + status + "]";
+	return "[" + status + "]"
 }

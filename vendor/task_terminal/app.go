@@ -1,4 +1,4 @@
-package taskterminal
+package task_terminal
 
 import (
 	"fmt"
@@ -8,16 +8,16 @@ import (
 )
 
 type App struct {
-	TaskStore Store
-	Printer   Printer
-	TaskTerminal  *TaskTerminal
+	TaskStore    Store
+	Printer      Printer
+	TaskTerminal *TaskTerminal
 }
 
 func NewApp() *App {
 	app := &App{
-		TaskTerminal:  &TaskTerminal{},
-		Printer:   NewScreenPrinter(),
-		TaskStore: NewFileStore(),
+		TaskTerminal: &TaskTerminal{},
+		Printer:      NewScreenPrinter(),
+		TaskStore:    NewFileStore(),
 	}
 	return app
 }
@@ -184,7 +184,7 @@ func (a *App) HandleNotes(input string) {
 func (a *App) ArchiveCompleted() {
 	a.Load()
 	for _, task := range a.TaskTerminal.Tasks() {
-		if (task.Status != "Task") {
+		if task.Status != "Task" {
 			task.Archive()
 		}
 	}
@@ -195,8 +195,8 @@ func (a *App) ArchiveCompleted() {
 func (a *App) ArchiveByStatus(input string) {
 	a.Load()
 	str := strings.Split(input, " ")
-	for _, task := range a.TaskTerminal.Tasks(){
-		if(task.Status == str[1]){
+	for _, task := range a.TaskTerminal.Tasks() {
+		if task.Status == str[1] {
 			fmt.Println("Task")
 			fmt.Println(task.Status)
 			fmt.Println("have been archived\n")
