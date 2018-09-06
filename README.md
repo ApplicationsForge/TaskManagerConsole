@@ -3,7 +3,7 @@
 ## Description
 Simple and convenient comand line task mamger, based on [gammons todolist](https://github.com/gammons/todolist) project.
 
-## Installation step
+## Installation steps
 1. Install Go from [project site](https://golang.omycat.info/)
 1. `cd $HOME`
 1. `mkdir -p go/src/TaskTerminal`
